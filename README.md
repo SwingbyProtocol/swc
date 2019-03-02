@@ -1,2 +1,2 @@
-# swv
-implementation of swingby witness validator (swv)
+# swc
+implementation of swingby witness component(swv)
