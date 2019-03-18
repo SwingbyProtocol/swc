@@ -1,8 +1,9 @@
 # SWC
 implementation of swingby witness component(swv)
 
-- meta tx relayer
-- ipfs resolver
+To do
+-[] meta tx relayer
+-[] ipfs resolver
 
 ### Using MetaTx Relayer
 
@@ -10,7 +11,7 @@ API endpoint
 - [POST] /api/v1/relayer
 ```body
 {
-    // all of params to be hexstring
+    // all of params should be hexstring
     params: {
         from, 
         to,  
@@ -22,4 +23,10 @@ API endpoint
     sig: "signaterue of sender"
 }
 ```
-return `{ result: true, txHash: "transaction hash" }`
+return `JSON`
+```
+{
+    result: true, 
+    txHash: "transaction hash"
+}
+```
