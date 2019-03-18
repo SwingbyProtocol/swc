@@ -1,9 +1,9 @@
 # SWC
-implementation of swingby witness component(swv)
+implementation of Swingby Witness Component(SWC)
 
 To do
--[] meta tx relayer
--[] ipfs resolver
+- [] meta tx relayer
+- [] ipfs resolver
 
 ### Using MetaTx Relayer
 
