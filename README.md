@@ -1,12 +1,13 @@
-# swc
+# SWC
 implementation of swingby witness component(swv)
 
 - meta tx relayer
 - ipfs resolver
 
-## Using MetaTx Relayer
+### Using MetaTx Relayer
 
-API endpoint [POST] /api/v1/relayer
+API endpoint 
+- [POST] /api/v1/relayer
 ```body
 {
     // all of params to be hexstring
