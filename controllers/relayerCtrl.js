@@ -23,7 +23,14 @@ module.exports.postMetaTx = async (req, reply) => {
             }
         }
 
-        isValidTx(web3, params, params.sig)
+        if (!isValidTx(web3, params, params.sig)) {
+            return {
+                result: false,
+                message: "sanitize error"
+            }
+        }
+
+        const send = await web3.eth.sendRawTransaction()
 
         const data = {
             data: "test",
@@ -36,24 +43,28 @@ module.exports.postMetaTx = async (req, reply) => {
 }
 
 function isValidTx(web3, params) {
-    const from = Buffer.from(params.from.slice(2), 'hex') //remove 0x
+    const from = Buffer.from(params.from.slice(2), 'hex')
     const to = Buffer.from(params.to.slice(2), "hex")
-    const amount = web3.utils.padLeft(web3.utils.numberToHex(params.amount)).slice(2)
+    const amount = Buffer.from(num2hex64(web3, params.amount), 'hex')
     const inputs = [
-        Buffer.from(web3.utils.padLeft(web3.utils.numberToHex(params.inputs[0])).slice(2), 'hex'),
-        Buffer.from(web3.utils.padLeft(web3.utils.numberToHex(params.inputs[0])).slice(2), 'hex')
+        Buffer.from(num2hex64(web3, params.inputs[0]), 'hex'),
+        Buffer.from(num2hex64(web3, params.inputs[1]), 'hex'),
+        Buffer.from(num2hex64(web3, params.inputs[2]), 'hex'),
+        Buffer.from(num2hex64(web3, params.inputs[3]), 'hex')
     ]
-    const relayer = Buffer.from(params.relayer, "hex")
-    const tokenReceiver = Buffer.from(params.tokenReceiver, "hex")
+    const relayer = Buffer.from(params.relayer.slice(2), 'hex')
+    const tokenReceiver = Buffer.from(params.tokenReceiver.slice(2), 'hex')
     const sig = ethUtil.fromRpcSig(params.sig);
-    console.log(from, to, amount, sig)
-    const prefix = new Buffer("\x19Ethereum Signed Message:\n");
-    const prefixedMsg = ethUtil.sha3(
+
+    const prefix = new Buffer.from("\x19Ethereum Signed Message:\n32", 'utf-8');
+
+    const msg = ethUtil.keccak256(
         Buffer.concat([
-            prefix,
+            Buffer.from(SWINGBY_TX_TYPEHASH.slice(2), 'hex'),
             from,
             to,
-            amount, ,
+            amount,
+            inputs[0],
             inputs[1],
             inputs[2],
             inputs[3],
@@ -61,12 +72,17 @@ function isValidTx(web3, params) {
             tokenReceiver
         ])
     );
+    const hash = ethUtil.keccak256(Buffer.concat([prefix, msg]))
 
-    const pubKey = util.ecrecover(prefixedMsg, sig.v, sig.r, sig.s);
-    const addrBuf = util.pubToAddress(pubKey);
-    const addr = util.bufferToHex(addrBuf);
+    const pubKey = ethUtil.ecrecover(hash, sig.v, sig.r, sig.s);
+    const addrBuf = ethUtil.pubToAddress(pubKey);
+    const addr = ethUtil.bufferToHex(addrBuf);
 
-    console.log(addr);
+    if (from.toString('hex') === addr.slice(2)) {
+        console.log('validated signature')
+        return true
+    }
+    return false
 }
 
 function sanitize(params) {
@@ -124,6 +140,14 @@ function isValidArray(inputs) {
         return false
     }
     return true
+}
+
+function num2hex64(web3, bn) {
+    return web3.utils.padLeft(web3.utils.numberToHex(bn), 64).slice(2)
+}
+
+function address2hex64(web3, address) {
+    return web3.utils.padLeft(address, 64).slice(2) //remove 0x
 }
 
 /**

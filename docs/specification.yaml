@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  description: "SWC specification"
+  description: "Swingby Witness Component(SWC) specification"
   version: "1.0.0"
-  title: "SWC specification"
+  title: "swc specification"
   contact:
     email: ""
 servers:
@@ -45,35 +45,34 @@ paths:
               properties:
                 from:
                   type: string
-                  pattern: ^[0-9a-fA-F]+$
-                  example: "0xd2330a9f6dde4715f540d1669bf75e89a1b4fbbc"
+                  required: true
+                  example: "0xd2330a9f6dDe4715F540D1669bf75E89a1b4FbBc"
                 to:
                   type: string
-                  pattern: ^[0-9a-fA-F]+$
-                  example: "0x7d0344e0ee6bc3901f4b11b9d9b8d001b49872a1"
+                  required: true
+                  example: "0x7D0344e0ee6bC3901F4b11b9d9b8D001b49872A1"
 
                 amount:
                   type: string
-                  example: "200000000"
+                  required: true
+                  example: "20000000000000000000"
                   description: "using BigNumber"
                 inputs:
                   type: array
-                  example: ["20000000", "2222", "40000", "3000"]
+                  example: ["4000000000", "200000", "100000000000000000", "1"]
                   items:
                     type: string
+                    required: true
                     description: "using BigNumber [0 => _gasPrice, 1 => _gasLimit, 2 => _gasTokenPerWei, 3 => _nonce]"
                 relayer:
                   type: string
-                  pattern: ^[0-9a-fA-F]+$
-                  example: "0x9780991cb8c857f0fa2f96020abe3bc410f97b26"
+                  example: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
                 tokenReceiver:
                   type: string
-                  pattern: ^[0-9a-fA-F]+$
-                  example: "0x9780991cb8c857f0fa2f96020abe3bc410f97b26"
+                  example: "0xCC8690540faE802A251945556817D49a96990f44"
                 sig:
                   type: string
-                  pattern: ^[0-9a-fA-F]+$
-                  example: "0x9780991cb8c857f0fa2f96020abe3bc410f97b26"
+                  example: "0x523863f32e497899d5d2c2fb6855f7da76fd9fa3927af887a0d21f352383f430701097c72f6b46efcdd65ecb34d859e97e88ed4952c36f1d8aa18171ec2152081c"
 
       responses:
         201:

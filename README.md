@@ -8,9 +8,10 @@ npm install
 ```
 npm start
 ```
-To do
+## To do
 - [ ] metaTx relayer
 - [ ] ipfs resolver
+- [ ] event resolver 
 
 Using
 
