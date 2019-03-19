@@ -1,3 +1,5 @@
+'use strict';
+
 const ihc = require('ipfs-http-client')
 const web3js = require('web3')
 const config = require('config');
@@ -23,7 +25,7 @@ module.exports.initWeb3 = () => {
     )
     instance.web3 = web3
     console.log(`web3 initialized ${eth.host} ${eth.port}`)
-    
+
 }
 
 module.exports.initIPFS = () => {

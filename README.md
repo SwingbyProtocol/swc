@@ -1,6 +1,13 @@
 # SWC
 implementation of Swingby Witness Component(SWC)
 
+## Getting started
+```
+npm install
+```
+```
+npm start
+```
 To do
 - [ ] metaTx relayer
 - [ ] ipfs resolver

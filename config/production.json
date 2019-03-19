@@ -1,17 +1,15 @@
 {
-	"ipfs": {
-		"bootstamp": [{
-				"host": "34.73.42.191",
-				"port": "5001"
-			}
-
-		]
-	},
-	"eth": {
-		"bootstamp": [{
-			"host": "52.77.247.130",
-			"port": "8545"
-		}]
-	},
-	"owner": "0xc7d83145cbb3cfb0b10b08626ebeac4e3bf4922eeb13b17dd1ee60412a209446"
+    "ipfs": {
+        "bootstamp": [{
+            "host": "34.73.42.191",
+            "port": "5001"
+        }]
+    },
+    "eth": {
+        "bootstamp": [{
+            "host": "52.77.247.130",
+            "port": "8545"
+        }]
+    },
+    "owner": "0xc7d83145cbb3cfb0b10b08626ebeac4e3bf4922eeb13b17dd1ee60412a209446"
 }

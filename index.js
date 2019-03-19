@@ -1,22 +1,17 @@
+'use strict'
 
-// Require the framework and instantiate it
-const fastify = require('fastify')({
-  logger: true
-})
+
+const fastify = require("./fastify")
 const routes = require("./routes")
-// Import Swagger Options
-const swagger = require("./config/swagger")
-// Register Swagger
-fastify.register(require("fastify-swagger"), swagger.options)
+const initIPFS = require("./resolver").initIPFS
+const initWeb3 = require("./resolver").initWeb3
 
-// Declare a route
-fastify.get('/', async (request, reply) => {
-  return { hello: 'world' }
-})
+initIPFS()
+initWeb3()
 
 routes.forEach((route, index) => {
   fastify.route(route)
- })
+})
 
 // Run the server!
 const start = async () => {
