@@ -1,32 +1,50 @@
-const ipfsClient = require('ipfs-http-client')
-const Web3 = require('web3')
+const ihc = require('ipfs-http-client')
+const web3js = require('web3')
 const config = require('config');
+const boom = require('boom')
 
-const nodes = config.get("eth")
+const ethNodes = config.get("eth")
 const ipfsNodes = config.get("ipfs")
 
-if (nodes.bootstamp.length == 0) {
-    throw new Error("eth node is not set")
+
+let instance = {
+    web3: null,
+    ipfs: null
 }
 
-if (ipfsNodes.bootstamp.length == 0) {
-    throw new Error("ipfs node is not set")
+module.exports.initWeb3 = () => {
+    if (ethNodes.bootstamp.length == 0 || instance.web3 != null) {
+        console.log('web3 is alreay initialized or something wrong')
+        return false
+    }
+    const eth = ethNodes.bootstamp[Math.floor(Math.random() * ethNodes.bootstamp.length)]
+    const web3 = new web3js(
+        new web3js.providers.HttpProvider(`http://${eth.host}:${eth.port}`)
+    )
+    instance.web3 = web3
+    console.log(`web3 initialized ${eth.host} ${eth.port}`)
+    
 }
 
-const eth = nodes.bootstamp[Math.floor(Math.random() * nodes.bootstamp.length)]
-const ipfs = ipfsNodes.bootstamp[Math.floor(Math.random() * ipfsNodes.bootstamp.length)]
+module.exports.initIPFS = () => {
+    if (ipfsNodes.bootstamp.length == 0 || instance.ipfs != null) {
+        console.log('ipfs is alreay initialized or something wrong')
+        return false
+    }
+    const ipfs = ipfsNodes.bootstamp[Math.floor(Math.random() * ipfsNodes.bootstamp.length)]
+    var ipfsObj = ihc({
+        host: ipfs.host,
+        port: ipfs.port,
+        protocol: 'http'
+    })
+    instance.ipfs = ipfsObj
+    console.log(`ipfs initialized ${ipfs.host} ${ipfs.port}`)
+}
 
-const web3 = new Web3(
-    new Web3.providers.HttpProvider(`http://${eth.host}:${eth.port}`)
-)
+module.exports.getIPFS = () => {
+    return instance.ipfs
+}
 
-var ipfsInstance = ipfsClient({
-    host: ipfs.host,
-    port: ipfs.port,
-    protocol: 'http'
-})
-
-module.exports = {
-    web3: web3,
-    ipfs: ipfsInstance
-};
+module.exports.getWeb3 = () => {
+    return instance.web3
+}

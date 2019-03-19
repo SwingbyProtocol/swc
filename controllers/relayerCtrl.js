@@ -1,16 +1,30 @@
-let express = require('express');
-let router = express.Router();
-let ethUtil = require('ethereumjs-util')
+// External Dependancies
+const boom = require('boom')
 
-/* POST join listing. */
-router.post('/', function (req, res, next) {
+// Get Data Models
+const resolver = require('../resolver')
 
-  const params = req.body.params
+resolver.initIPFS()
+resolver.initWeb3()
 
-  return res.send("tes")
+const web3 = resolver.getWeb3()
 
-  if (!sanitize(params)) {
-    return res.send({
+module.exports.postMetaTx = async (req, reply) => {
+  try {
+    const latest = await web3.eth.getBlock("latest")
+    const data = {
+      data: "test",
+      latest: latest
+    }
+    return data
+  } catch (err) {
+    throw boom.boomify(err)
+  }
+}
+
+/**
+ * if (!sanitize(params)) {
+    return res.status(500).send({
       result: false,
       message: "sanitize error"
     })
@@ -40,7 +54,7 @@ router.post('/', function (req, res, next) {
     ])
   );
 
-  const pubKey = util.ecrecover(prefixedMsg, res.v, res.r, res.s);
+  const pubKey = util.ecrecover(prefixedMsg, sig.v, sig.r, sig.s);
   const addrBuf = util.pubToAddress(pubKey);
   const addr = util.bufferToHex(addrBuf);
 
@@ -49,24 +63,26 @@ router.post('/', function (req, res, next) {
   res.send('respond with a resource');
 });
 
-
 function sanitize(params) {
+  if (!params.from)
+    return false
   if (!isHex(params.from))
+    return false
+  if (!params.to)
     return false
   if (!isHex(params.to))
     return false
-  if (!isHex(params.amount))
-    return false
+  return true
 }
 
 function isHex(str) {
+
   regexp = /^[0-9a-fA-F]+$/;
   if (regexp.test(str)) {
     return true
   } else {
-    return false;
+    return false
   }
 }
 
-
-module.exports = router;
+ */
