@@ -1,11 +1,21 @@
-let express = require('express');
-let router = express.Router();
-let ethUtil = require('ethereumjs-util')
+const express = require('express');
+const router = express.Router();
+const ethUtil = require('ethereumjs-util')
+const resolver = require("../resolver")
+
+console.log(resolver)
 
 /* GET users listing. */
-router.post('/relayer', function (req, res, next) {
+router.post('/', function (req, res, next) {
 
-  const params = req.body.params
+  const params = req.body
+
+  if (!sanitize(params)) {
+    return res.status(500).send({
+      result: false,
+      message: "sanitize error"
+    })
+  }
 
   const from = Buffer.from(params.from, 'hex')
   const to = Buffer.from(params.to, "hex")
@@ -13,7 +23,7 @@ router.post('/relayer', function (req, res, next) {
   const inputs = params.inputs.filter((m) => Buffer.from(im, "hex"))
   const relayer = Buffer.from(params.relayer, "hex")
   const tokenReceiver = Buffer.from(params.tokenReceiver, "hex")
-  const res = ethUtil.fromRpcSig(params.sig);
+  const sig = ethUtil.fromRpcSig(params.sig);
 
   const prefix = new Buffer("\x19Ethereum Signed Message:\n");
   const prefixedMsg = ethUtil.sha3(
@@ -31,7 +41,7 @@ router.post('/relayer', function (req, res, next) {
     ])
   );
 
-  const pubKey = util.ecrecover(prefixedMsg, res.v, res.r, res.s);
+  const pubKey = util.ecrecover(prefixedMsg, sig.v, sig.r, sig.s);
   const addrBuf = util.pubToAddress(pubKey);
   const addr = util.bufferToHex(addrBuf);
 
@@ -39,5 +49,28 @@ router.post('/relayer', function (req, res, next) {
 
   res.send('respond with a resource');
 });
+
+function sanitize(params) {
+  if (!params.from)
+    return false
+  if (!isHex(params.from))
+    return false
+  if (!params.to)
+    return false
+  if (!isHex(params.to))
+    return false
+  return true
+}
+
+function isHex(str) {
+
+  regexp = /^[0-9a-fA-F]+$/;
+  if (regexp.test(str)) {
+    return true
+  } else {
+    return false
+  }
+}
+
 
 module.exports = router;

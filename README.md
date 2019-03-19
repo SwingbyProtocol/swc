@@ -2,16 +2,18 @@
 implementation of Swingby Witness Component(SWC)
 
 To do
-- [] meta tx relayer
-- [] ipfs resolver
+- [ ] metaTx relayer
+- [ ] ipfs resolver
 
-### Using MetaTx Relayer
+## APIs
+
+###$ Using MetaTx Relayer
 
 API endpoint 
 - [POST] /api/v1/relayer
 ```body
 {
-    // all of params should be hexstring
+    // all of params should be hexstring removed "0x"
     params: {
         from, 
         to,  

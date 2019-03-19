@@ -1,16 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var bootstamp = [
-  "34.73.42.191"
-]
-var ipfsClient = require('ipfs-http-client')
-
-var ipfs = ipfsClient({
-  host: bootstamp[0],
-  port: '5001',
-  protocol: 'http'
-})
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
