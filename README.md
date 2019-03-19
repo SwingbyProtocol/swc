@@ -7,7 +7,7 @@ To do
 
 ## APIs
 
-###$ Using MetaTx Relayer
+#### Using MetaTx Relayer
 
 API endpoint 
 - [POST] /api/v1/relayer
