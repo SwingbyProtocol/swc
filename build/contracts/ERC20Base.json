@@ -339,7 +339,7 @@
         "id": 1933,
         "nodeType": "ImportDirective",
         "scope": 2087,
-        "sourceUnit": 2812,
+        "sourceUnit": 2814,
         "src": "46:27:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -371,10 +371,10 @@
               "id": 1936,
               "name": "Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2811,
+              "referencedDeclaration": 2813,
               "src": "818:4:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Role_$2811",
+                "typeIdentifier": "t_contract$_Role_$2813",
                 "typeString": "contract Role"
               }
             },
@@ -385,8 +385,8 @@
         ],
         "contractDependencies": [
           1929,
-          2457,
-          2811
+          2459,
+          2813
         ],
         "contractKind": "contract",
         "documentation": "@title ERC20Base\n@dev ERC20Base logic",
@@ -394,9 +394,9 @@
         "id": 2086,
         "linearizedBaseContracts": [
           2086,
-          2811,
+          2813,
           1929,
-          2457
+          2459
         ],
         "name": "ERC20Base",
         "nodeType": "ContractDefinition",
@@ -455,7 +455,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "924:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -511,7 +511,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "882:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -694,7 +694,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1074:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -750,7 +750,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1032:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -943,7 +943,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1220:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -999,7 +999,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1178:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1165,7 +1165,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1380:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -1221,7 +1221,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1330:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1387,7 +1387,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1560:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -1443,7 +1443,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1510:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1672,7 +1672,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1673:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1691,7 +1691,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2773,
+                  "referencedDeclaration": 2775,
                   "src": "1683:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1838,7 +1838,7 @@
                       "name": "_setOwner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2800,
+                      "referencedDeclaration": 2802,
                       "src": "1865:9:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
@@ -1903,7 +1903,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1820:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1922,7 +1922,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2773,
+                  "referencedDeclaration": 2775,
                   "src": "1830:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2043,7 +2043,7 @@
                       "name": "_setPaused",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2810,
+                      "referencedDeclaration": 2812,
                       "src": "1991:10:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_bool_$returns$__$",
@@ -2108,7 +2108,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2773,
+                  "referencedDeclaration": 2775,
                   "src": "1956:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2237,7 +2237,7 @@
         "id": 1933,
         "nodeType": "ImportDirective",
         "scope": 2087,
-        "sourceUnit": 2812,
+        "sourceUnit": 2814,
         "src": "46:27:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2269,10 +2269,10 @@
               "id": 1936,
               "name": "Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2811,
+              "referencedDeclaration": 2813,
               "src": "818:4:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Role_$2811",
+                "typeIdentifier": "t_contract$_Role_$2813",
                 "typeString": "contract Role"
               }
             },
@@ -2283,8 +2283,8 @@
         ],
         "contractDependencies": [
           1929,
-          2457,
-          2811
+          2459,
+          2813
         ],
         "contractKind": "contract",
         "documentation": "@title ERC20Base\n@dev ERC20Base logic",
@@ -2292,9 +2292,9 @@
         "id": 2086,
         "linearizedBaseContracts": [
           2086,
-          2811,
+          2813,
           1929,
-          2457
+          2459
         ],
         "name": "ERC20Base",
         "nodeType": "ContractDefinition",
@@ -2353,7 +2353,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "924:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -2409,7 +2409,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "882:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2592,7 +2592,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1074:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -2648,7 +2648,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1032:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2841,7 +2841,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1220:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -2897,7 +2897,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1178:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3063,7 +3063,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1380:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -3119,7 +3119,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1330:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3285,7 +3285,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3131,
+                        "referencedDeclaration": 3133,
                         "src": "1560:5:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_ERC20Base_$2086",
@@ -3341,7 +3341,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1510:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3570,7 +3570,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1673:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3589,7 +3589,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2773,
+                  "referencedDeclaration": 2775,
                   "src": "1683:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3736,7 +3736,7 @@
                       "name": "_setOwner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2800,
+                      "referencedDeclaration": 2802,
                       "src": "1865:9:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
@@ -3801,7 +3801,7 @@
                   "name": "notPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2782,
+                  "referencedDeclaration": 2784,
                   "src": "1820:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3820,7 +3820,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2773,
+                  "referencedDeclaration": 2775,
                   "src": "1830:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3941,7 +3941,7 @@
                       "name": "_setPaused",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2810,
+                      "referencedDeclaration": 2812,
                       "src": "1991:10:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_bool_$returns$__$",
@@ -4006,7 +4006,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2773,
+                  "referencedDeclaration": 2775,
                   "src": "1956:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -4104,7 +4104,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-19T05:59:41.307Z",
+  "updatedAt": "2019-03-20T13:10:30.968Z",
   "devdoc": {
     "details": "ERC20Base logic",
     "methods": {

@@ -13,6 +13,12 @@ const getIPFS = require('../resolver').getIPFSs
 
 const SWINGBY_TX_TYPEHASH = "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
 
+if (!isHex(process.env.KEY)) {
+    throw boom.boomify(new Error('privkey is not provided'))
+}
+const privkey = new Buffer.from(process.env.KEY.slice(2), 'hex')
+console.log(`relayer == 0x${ethUtil.privateToAddress(privkey).toString('hex')}`)
+
 module.exports.postMetaTx = async (req, reply) => {
     try {
         if (!isValidToken(req)) {
@@ -37,7 +43,7 @@ module.exports.postMetaTx = async (req, reply) => {
         if (!isValidMetaTx(params)) {
             return {
                 result: false,
-                message: "sanitize error"
+                message: "valid tx error"
             }
         }
 
@@ -45,10 +51,9 @@ module.exports.postMetaTx = async (req, reply) => {
             return {
                 result: false,
                 message: "relayer key error"
-            } 
+            }
         }
 
-        const privkey = new Buffer.from(process.env.KEY.slice(2), 'hex')
 
         if (!isValidRelayer(params.relayer, privkey)) {
             return {
@@ -65,38 +70,50 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const token = new web3.eth.Contract(tokenAbi, tokenAddress)
 
-        const data = token.methods.transferMetaTx(
+        const func = token.methods.transferMetaTx(
             params.from,
             params.to,
             params.amount,
-            params.inputs,
+            [params.inputs[0], params.inputs[1], params.inputs[2], params.inputs[3]],
             params.relayer,
             params.tokenReceiver,
             params.sig
-        ).encodeABI()
+        )
 
-        const txData = {
-            nonce: ethUtil.bufferToHex(new BN(nonce).toBuffer()),
-            gasLimit: ethUtil.bufferToHex(new BN(params.inputs[1]).add(new BN('80000')).toBuffer()),
-            gasPrice: ethUtil.bufferToHex(new BN(params.inputs[0]).toBuffer()), // 10 Gwei
-            to: tokenAddress,
+        const estimateGas = await func.estimateGas({
             from: params.relayer,
-            value: 0,
-            data: data
-        }
+            gasPrice: ethUtil.bufferToHex(new BN(params.inputs[0]).toBuffer()),
+            gasLimit: ethUtil.bufferToHex(new BN("480000").sub(new BN(params.inputs[1])).toBuffer()),
+        })
+        console.log(estimateGas)
 
-        console.log(txData)
+        const txParams = {
+            nonce: '0x' + nonce.toString(16),
+            gasPrice: ethUtil.bufferToHex(new BN(params.inputs[0]).toBuffer()),
+            gasLimit: ethUtil.bufferToHex(new BN("480000").sub(new BN(params.inputs[1])).toBuffer()),
+            from: params.relayer,
+            to: tokenAddress,
+            data: func.encodeABI()
+        };
 
-        var tx = new Tx(txData);
+        var tx = new Tx(txParams);
         tx.sign(privkey);
 
-        const serializedTx = tx.serialize().toString('hex')
-        const send = await web3.eth.sendSignedTransaction('0x' + serializedTx)
+        const serializedTx = '0x' + tx.serialize().toString('hex')
+
+        web3.eth.sendSignedTransaction(serializedTx).once('transactionHash', async hash => {
+            console.log(hash)
+        }).catch((err) => {
+            console.log(err)
+        })
+        const txHash = await web3.utils.sha3(serializedTx);
 
         return {
             result: true,
-            tx: send
+            tx: serializedTx,
+            txHash: txHash
         }
+
     } catch (err) {
         throw boom.boomify(err)
     }
@@ -204,7 +221,7 @@ function isHex(str) {
     if (str.length <= 2) {
         return false
     }
-    regexp = /^[0-9a-fA-F]+$/;
+    const regexp = /^[0-9a-fA-F]+$/;
     if (!regexp.test(str.slice(2))) {
         return false
     }
