@@ -12,6 +12,7 @@
   "dependencies": {
     "boom": "^7.2.2",
     "ethereumjs-tx": "^1.3.7",
+    "ethereumjs-util": "^6.1.0",
     "fastify": "^1.13.0",
     "fastify-swagger": "^0.15.3",
     "ipfs-http-client": "^30.1.0",

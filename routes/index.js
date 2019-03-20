@@ -8,11 +8,6 @@ const routes = [{
         method: 'POST',
         url: '/api/v1/metaTxRelay/:tokenAddress',
         handler: relayer.postMetaTx
-    },
-    {
-        method: 'GET',
-        url: '/api/v1/keep',
-        handler: keep.postMetaTx
     }
 ]
 

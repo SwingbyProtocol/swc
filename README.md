@@ -6,7 +6,7 @@ implementation of Swingby Witness Component(SWC)
 npm install
 ```
 ```
-npm start
+KEY=<0xf321.... your priv key> npm start
 ```
 ## API references
 `http://localhost:3000/documentation`
