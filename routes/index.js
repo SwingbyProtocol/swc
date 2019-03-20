@@ -7,7 +7,7 @@ const keep = require('../controllers/keepCtrl')
 
 const routes = [{
         method: 'POST',
-        url: '/api/v1/metaTxRelay',
+        url: '/api/v1/metaTxRelay/:tokenAddress',
         handler: relayer.postMetaTx
     },
     {

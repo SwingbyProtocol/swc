@@ -17,7 +17,7 @@ const fastify = require('fastify')({
                     path: req.path,
                     parameters: req.parameters,
                     body: req.body,
-                    headers: req.headers
+                    //headers: req.headers
                 };
             }
         }

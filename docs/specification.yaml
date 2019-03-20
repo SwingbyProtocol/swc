@@ -30,8 +30,15 @@ paths:
                 example:
                   health: true
                   date: "2018-02-19T15:36:46.758Z"
-  /metaTxRelay:
+  /metaTxRelay/{tokenAddress}:
     post:
+      parameters:
+        - in: path
+          name: tokenAddress   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+          description: The token address
       description: "test"
       tags:
         - Status

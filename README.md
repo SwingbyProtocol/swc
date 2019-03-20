@@ -9,11 +9,13 @@ npm install
 npm start
 ```
 ## To do
-- [ ] metaTx relayer
+- [x] metaTx relayer
 - [ ] ipfs resolver
 - [ ] event resolver 
 
-Using
+## API Refference
+`http://localhost:3000/documentation`
+## Using
 
 - fastify 
 - fastify-swagger

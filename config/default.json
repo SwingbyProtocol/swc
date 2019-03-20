@@ -11,6 +11,10 @@
         "bootstamp": [{
             "host": "localhost",
             "port": "8545"
+        }],
+        "tokens": [{
+            "name": "GOV",
+            "address": "0x9B00A62BeB05609999EC0554524fE9f9Dd3f2De8"
         }]
     },
     "owner": "0xc7d83145cbb3cfb0b10b08626ebeac4e3bf4922eeb13b17dd1ee60412a209446"

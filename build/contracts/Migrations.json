@@ -1388,11 +1388,11 @@
       "events": {},
       "links": {},
       "address": "0x1f2272b7CBf91D053Fc7beCDE87677B507f96Ad9",
-      "transactionHash": "0x64e4226675c182381a08e27f62088b79c0eab03eb21adf021b2826b1f2877837"
+      "transactionHash": "0xcf33fbba0b4bf717bc8b98b2787cdfabb775230ba51c61b6f6d5e4c532b2d5eb"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-19T05:59:43.068Z",
+  "updatedAt": "2019-03-20T05:45:45.377Z",
   "devdoc": {
     "methods": {},
     "title": "Migrations"
