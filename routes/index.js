@@ -1,6 +1,5 @@
 'use strict';
 
-// Import our Controllers
 const relayer = require('../controllers/relayerCtrl')
 const keep = require('../controllers/keepCtrl')
 

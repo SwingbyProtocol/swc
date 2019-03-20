@@ -1,4 +1,5 @@
-// External Dependancies
+'use strict';
+
 const boom = require('boom')
 const ethUtil = require('ethereumjs-util')
 const config = require('config')
@@ -38,6 +39,13 @@ module.exports.postMetaTx = async (req, reply) => {
                 result: false,
                 message: "sanitize error"
             }
+        }
+
+        if (!isHex(process.env.KEY)) {
+            return {
+                result: false,
+                message: "relayer key error"
+            } 
         }
 
         const privkey = new Buffer.from(process.env.KEY.slice(2), 'hex')
