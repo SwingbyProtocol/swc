@@ -9,16 +9,13 @@
     },
     "eth": {
         "bootstamp": [{
-            "host": "localhost",
+            "host": "13.58.104.237",
             "port": "8545"
         }],
         "tokens": [{
             "name": "GOV",
-            "address": "0xE17A43439B750F742c7e2D675D272EE15F8BE638"
-        }]
-    },
-    "user": {
-        "gasPrice": "4000000000",
-        "gasLimit": "200000"
+            "address": "0x74802936F24b6e774e505116cebf582F446429e9"
+        }],
+        "gasPrice": "4000000000"
     }
 }

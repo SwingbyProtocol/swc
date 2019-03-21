@@ -26,14 +26,14 @@
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
     "exportedSymbols": {
       "Constant": [
-        2766
+        2778
       ]
     },
-    "id": 2767,
+    "id": 2779,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2762,
+        "id": 2774,
         "literals": [
           "solidity",
           "0.5",
@@ -48,19 +48,19 @@
         "contractKind": "contract",
         "documentation": "@title Constant \n@dev ",
         "fullyImplemented": true,
-        "id": 2766,
+        "id": 2778,
         "linearizedBaseContracts": [
-          2766
+          2778
         ],
         "name": "Constant",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2765,
+            "id": 2777,
             "name": "SWINGBY_TX_TYPEHASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2766,
+            "scope": 2778,
             "src": "221:112:12",
             "stateVariable": true,
             "storageLocation": "default",
@@ -69,7 +69,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2763,
+              "id": 2775,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "221:7:12",
@@ -81,7 +81,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831393961613134363532333330343736306138383039326565316464333338613638663130313835333735383237663165383338616235653962643136323262",
-              "id": 2764,
+              "id": 2776,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -99,7 +99,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 2767,
+        "scope": 2779,
         "src": "62:275:12"
       }
     ],
@@ -109,14 +109,14 @@
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
     "exportedSymbols": {
       "Constant": [
-        2766
+        2778
       ]
     },
-    "id": 2767,
+    "id": 2779,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2762,
+        "id": 2774,
         "literals": [
           "solidity",
           "0.5",
@@ -131,19 +131,19 @@
         "contractKind": "contract",
         "documentation": "@title Constant \n@dev ",
         "fullyImplemented": true,
-        "id": 2766,
+        "id": 2778,
         "linearizedBaseContracts": [
-          2766
+          2778
         ],
         "name": "Constant",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2765,
+            "id": 2777,
             "name": "SWINGBY_TX_TYPEHASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2766,
+            "scope": 2778,
             "src": "221:112:12",
             "stateVariable": true,
             "storageLocation": "default",
@@ -152,7 +152,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2763,
+              "id": 2775,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "221:7:12",
@@ -164,7 +164,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831393961613134363532333330343736306138383039326565316464333338613638663130313835333735383237663165383338616235653962643136323262",
-              "id": 2764,
+              "id": 2776,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -182,7 +182,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 2767,
+        "scope": 2779,
         "src": "62:275:12"
       }
     ],
@@ -194,7 +194,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-21T17:41:37.859Z",
+  "updatedAt": "2019-03-21T12:44:44.282Z",
   "devdoc": {
     "methods": {},
     "title": "Constant "

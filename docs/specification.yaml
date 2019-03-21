@@ -31,10 +31,24 @@ paths:
                   health: true
                   date: "2018-02-19T15:36:46.758Z"
   /metaTxRelay/{tokenAddress}:
+    get:
+      parameters:
+        - in: path
+          name: tokenAddress # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+          description: The token address
+      description: "test"
+      tags:
+        - Status
+      responses:
+        200:
+          description: GET
     post:
       parameters:
         - in: path
-          name: tokenAddress   # Note the name is the same as in the path
+          name: tokenAddress # Note the name is the same as in the path
           required: true
           schema:
             type: string
@@ -71,15 +85,25 @@ paths:
                     type: string
                     required: true
                     description: "using BigNumber [0 => _gasPrice, 1 => _gasLimit, 2 => _gasTokenPerWei, 3 => _nonce]"
-                relayer:
+                providers:
+                  type: array
+                  example: ["0xb38f6C9d887b038038aa0272a4cd15c75B28E781", "0xCC8690540faE802A251945556817D49a96990f44"]
+                  items:
+                    type: string
+                    required: true
+                    description: "[0 => _relayer, 1 => _tokenReceiver"
+                v:
                   type: string
-                  example: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
-                tokenReceiver:
+                  required: true
+                  example: "28"
+                r:
                   type: string
-                  example: "0xCC8690540faE802A251945556817D49a96990f44"
-                sig:
+                  required: true
+                  example: "0x523863f32e497899d5d2c2fb6855f7da76fd9fa3927af887a0d21f352383f430"
+                s:
                   type: string
-                  example: "0x523863f32e497899d5d2c2fb6855f7da76fd9fa3927af887a0d21f352383f430701097c72f6b46efcdd65ecb34d859e97e88ed4952c36f1d8aa18171ec2152081c"
+                  required: true
+                  example: "0x701097c72f6b46efcdd65ecb34d859e97e88ed4952c36f1d8aa18171ec215208"
 
       responses:
         201:
