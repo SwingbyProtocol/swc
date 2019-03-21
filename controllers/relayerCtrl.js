@@ -147,7 +147,7 @@ function validatePost(params, body) {
         if (!sanitize(body))
             reject(new Error("sanitize error"))
         if (!isValidRelayer(body.providers, privkey))
-            reject(new Error("sender is not relayer"))
+            reject(new Error("sender or tokenReceiver is not relayer"))
         if (!isValidMetaTx(body))
             reject(new Error("valid tx error"))
 

@@ -3,11 +3,9 @@
 const ihc = require('ipfs-http-client')
 const web3js = require('web3')
 const config = require('config');
-const boom = require('boom')
 
 const ethNodes = config.get("eth")
 const ipfsNodes = config.get("ipfs")
-
 
 let instance = {
     web3: null,
