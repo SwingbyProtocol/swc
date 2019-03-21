@@ -25,7 +25,7 @@ if (!isHex(process.env.KEY)) {
     throw boom.boomify(new Error('privkey is not provided'))
 }
 const privkey = new Buffer.from(process.env.KEY.slice(2), 'hex')
-const sender = "0x" + ethUtil.privateToAddress(privkey).toString('hex')
+const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey).toString('hex'))
 ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 });
@@ -42,11 +42,15 @@ module.exports.getMetaTx = async (req, reply) => {
         const tokenAddress = req.params.tokenAddress
         const token = new web3.eth.Contract(tokenAbi, tokenAddress)
 
+        console.log(sender)
+
         const tokenPrice = await token.methods.getEstimateTokenPrice(sender).call()
 
         return {
             result: true,
             relayer: {
+                relayer: sender,
+                token: tokenAddress,
                 gasPrice: userConf.gasPrice,
                 gasLimit: userConf.gasLimit,
                 tokenPrice: tokenPrice.toString()
@@ -85,7 +89,7 @@ module.exports.postMetaTx = async (req, reply) => {
         const estimateGas = await func.estimateGas({
             from: body.providers[0],
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
-            gasLimit: ethUtil.bufferToHex(new BN("476000").sub(new BN(body.inputs[1])).toBuffer()),
+            gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
         })
         console.log("estimateGas => ", estimateGas)
 
@@ -94,7 +98,7 @@ module.exports.postMetaTx = async (req, reply) => {
         const txParams = {
             nonce: '0x' + nonce.toString(16),
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
-            gasLimit: ethUtil.bufferToHex(new BN("476000").sub(new BN(body.inputs[1])).toBuffer()),
+            gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
             from: body.providers[0],
             to: tokenAddress,
             data: func.encodeABI()
@@ -125,12 +129,13 @@ module.exports.postMetaTx = async (req, reply) => {
 }
 
 function validateGet(params, body) {
-    if (!isValidToken(params))
-        return {
-            result: false,
-            message: "token validation error"
-        }
-    return true
+    return new Promise((resolve, reject) => {
+
+        if (!isValidToken(params))
+            reject(new Error("token validation error"))
+
+        resolve(true)
+    })
 }
 
 function validatePost(params, body) {
