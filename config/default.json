@@ -14,11 +14,12 @@
         }],
         "tokens": [{
             "name": "GOV",
-            "address": "0x521F18B4d3c3c2Bc379d262AD70c8644A3f2A05b"
+            "address": "0xe54FF9651e1ee2b49A08Fa25ad4231b77185CEc0"
         }]
     },
     "user": {
         "gasPrice": "4000000000",
-        "gasLimit": "200000"
+        "gasLimit": "200000",
+        "tokenReceiver": "0xCC8690540faE802A251945556817D49a96990f44"
     }
 }

@@ -140,33 +140,42 @@ function validateGet(params, body) {
 
 function validatePost(params, body) {
     return new Promise((resolve, reject) => {
+        if (!isValidConfig(body))
+            reject(new Error("config is wrong"))
         if (!isValidToken(params))
             reject(new Error("token validation error"))
         if (!sanitize(body))
             reject(new Error("sanitize error"))
+        if (!isValidRelayer(body.providers, privkey))
+            reject(new Error("sender is not relayer"))
         if (!isValidMetaTx(body))
             reject(new Error("valid tx error"))
-        if (!isValidRelayer(body.providers[0], privkey))
-            reject(new Error("sender is not relayer"))
-        if (!isValidUserConfig(body))
-            reject(new Error("config is wrong"))
+
         resolve(true)
     })
 }
 
 
-function isValidUserConfig(body) {
+function isValidConfig(body) {
     if (!userConf.gasPrice)
         return false
     if (!userConf.gasLimit)
+        return false
+    if (!ethConf.tokens)
+        return false
+    if (!userConf.tokenReceiver)
         return false
     if (!isStringInteger(userConf.gasPrice))
         return false
     if (!isStringInteger(userConf.gasLimit))
         return false
+    if (!ethConf.tokens instanceof Array)
+        return false
     if (userConf.gasPrice !== body.inputs[0])
         return false
     if (userConf.gasLimit !== body.inputs[1])
+        return false
+    if (!isHex(userConf.tokenReceiver))
         return false
     return true
 }
@@ -185,11 +194,14 @@ function isValidToken(params) {
     return true
 }
 
-function isValidRelayer(relayer, privkey) {
-    const sender = ethUtil.privateToAddress(privkey)
-    if (Buffer.from(relayer.slice(2), 'hex').toString('hex') !== sender.toString('hex')) {
+function isValidRelayer(providers, privkey) {
+    const sender = ethUtil.privateToAddress(privkey).toString('hex')
+    if (Buffer.from(providers[0].slice(2), 'hex').toString('hex') !== sender) {
         return false
     }
+    const tokenReceiver = Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
+    if (Buffer.from(providers[1].slice(2), 'hex').toString('hex') !== tokenReceiver)
+        return false
     return true;
 }
 
