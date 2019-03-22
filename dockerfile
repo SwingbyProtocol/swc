@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:11
+FROM node:11
 
 WORKDIR /home/node/app
 COPY . .
@@ -8,4 +8,3 @@ COPY . .
 RUN npm install
 
 EXPOSE 3000
-CMD ["node", "index.js"]

@@ -9,7 +9,7 @@
     },
     "eth": {
         "bootstamp": [{
-            "host": "http://",
+            "host": "http://52.208.46.161",
             "port": "8549"
         }],
         "tokens": [{
