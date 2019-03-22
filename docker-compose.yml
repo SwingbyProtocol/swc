@@ -6,8 +6,6 @@ services:
     environment:
       - NODE_ENV
       - KEY
-    volumes:
-      - ./:/home/node/app
     ports:
       - "3000:3000"
     command: "npm start"
