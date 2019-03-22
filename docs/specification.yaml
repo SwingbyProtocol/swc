@@ -85,13 +85,10 @@ paths:
                     type: string
                     required: true
                     description: "using BigNumber [0 => _gasPrice, 1 => _gasLimit, 2 => _gasTokenPerWei, 3 => _nonce]"
-                providers:
-                  type: array
-                  example: ["0xb38f6C9d887b038038aa0272a4cd15c75B28E781", "0xCC8690540faE802A251945556817D49a96990f44"]
-                  items:
-                    type: string
-                    required: true
-                    description: "[0 => _relayer, 1 => _tokenReceiver"
+                relayer:
+                  type: string
+                  example: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
+                  required: true
                 v:
                   type: string
                   required: true
@@ -99,12 +96,12 @@ paths:
                 r:
                   type: string
                   required: true
-                  example: "0x523863f32e497899d5d2c2fb6855f7da76fd9fa3927af887a0d21f352383f430"
+                  example: "0x9b94e91c90cb884eacb312140ec2e70a015a293abd49631ac5ffdae017cb0b4e"
                 s:
                   type: string
                   required: true
-                  example: "0x701097c72f6b46efcdd65ecb34d859e97e88ed4952c36f1d8aa18171ec215208"
+                  example: "0x36e66e4b33d54c16d583311eeaa6c1894302dba23046e6de91ce62e0c9ce3f60"
 
       responses:
-        201:
-          description: Created
+        200:
+          description: OK

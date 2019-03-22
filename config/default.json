@@ -9,12 +9,12 @@
     },
     "eth": {
         "bootstamp": [{
-            "host": "localhost",
+            "host": "http://localhost",
             "port": "8545"
         }],
         "tokens": [{
             "name": "GOV",
-            "address": "0x054e01E71Cea4A11fb1C0197C157e71713018d58"
+            "address": "0x1EE1e8d5f1785593415638564b631f51Ce6Bd1AB"
         }]
     },
     "user": {

@@ -1384,15 +1384,21 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
+    "3": {
+      "events": {},
+      "links": {},
+      "address": "0x054e01E71Cea4A11fb1C0197C157e71713018d58",
+      "transactionHash": "0xd0d19ff5f8e945b292f5e46c36f0158c7b7d9b6ec9c401f3efcefcbcf939429d"
+    },
     "343": {
       "events": {},
       "links": {},
-      "address": "0xc5F5ee9B7c66CCFaFD8998DCDB26B1A69AA70033",
-      "transactionHash": "0x4393f83b2334994f88b5e11a68d7f0bd31beaa4dec6268efe40dffa50b38bfec"
+      "address": "0xB682C3A6a27929A79f0E37648431d7e91B1a0eC7",
+      "transactionHash": "0xa3673bac3ac4673f63c00beb9e0826320188d4e5c4295122deba2f55bcf536c5"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-21T17:48:26.609Z",
+  "updatedAt": "2019-03-22T05:43:47.123Z",
   "devdoc": {
     "methods": {},
     "title": "Migrations"

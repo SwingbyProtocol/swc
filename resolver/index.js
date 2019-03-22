@@ -19,7 +19,7 @@ module.exports.initWeb3 = () => {
     }
     const eth = ethNodes.bootstamp[Math.floor(Math.random() * ethNodes.bootstamp.length)]
     const web3 = new web3js(
-        new web3js.providers.HttpProvider(`http://${eth.host}:${eth.port}`)
+        new web3js.providers.HttpProvider(`${eth.host}:${eth.port}`)
     )
     instance.web3 = web3
     console.log(`web3 initialized ${eth.host} ${eth.port}`)

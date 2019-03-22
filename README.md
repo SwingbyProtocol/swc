@@ -8,6 +8,10 @@ npm install
 ```
 KEY=<0xf321.... your priv key> npm start
 ```
+for production
+```
+NODE_ENV=<"testnet", "mainnet"> KEY=<0xf321.... your priv key> npm start
+```
 ## API references
 `http://localhost:3000/documentation`
 

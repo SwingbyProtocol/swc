@@ -29,6 +29,7 @@ const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey
 ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 });
+let relayerBalanceWei
 console.log(`relayer == ${sender}`)
 
 module.exports.getMetaTx = async (req, reply) => {
@@ -37,20 +38,25 @@ module.exports.getMetaTx = async (req, reply) => {
 
         const params = req.params
         const body = req.body
-        const success = await validateGet(params, body)
 
-        const tokenAddress = req.params.tokenAddress
+        await validateGet(params, body)
+
+        const tokenAddress = "0x" + Buffer.from(req.params.tokenAddress.slice(2), 'hex').toString('hex')
         const token = new web3.eth.Contract(tokenAbi, tokenAddress)
 
-        console.log(sender)
+        const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
         const tokenPrice = await token.methods.getEstimateTokenPrice(sender).call()
+
+        relayerBalanceWei = await web3.eth.getBalance(sender)
 
         return {
             result: true,
             relayer: {
+                token: ethUtil.toChecksumAddress(tokenAddress),
                 relayer: sender,
-                token: tokenAddress,
+                relayerBalanceWei: relayerBalanceWei,
+                tokenReceiver: ethUtil.toChecksumAddress(tokenReceiver),
                 gasPrice: userConf.gasPrice,
                 gasLimit: userConf.gasLimit,
                 tokenPrice: tokenPrice.toString()
@@ -75,31 +81,37 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const token = new web3.eth.Contract(tokenAbi, tokenAddress)
 
+        const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
+
         const func = await token.methods.transferMetaTx(
             body.from,
             body.to,
             body.amount,
-            [body.inputs[0], body.inputs[1], body.inputs[2], body.inputs[3]],
-            [body.providers[0], body.providers[1]],
+            [...body.inputs],
+            body.relayer,
             body.v,
             body.r,
-            body.s
+            body.s,
+            ethUtil.toChecksumAddress(tokenReceiver)
         )
 
         const estimateGas = await func.estimateGas({
-            from: body.providers[0],
+            from: body.relayer,
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
             gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
         })
         console.log("estimateGas => ", estimateGas)
 
-        const nonce = await web3.eth.getTransactionCount(body.providers[0])
+        if (new BN(estimateGas).mul(new BN(body.inputs[0])).gt(new BN(relayerBalanceWei)))
+            throw boom.boomify(new Error("relayer hasn't enough balance of ether"))
+
+        const nonce = await web3.eth.getTransactionCount(body.relayer)
 
         const txParams = {
             nonce: '0x' + nonce.toString(16),
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
             gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
-            from: body.providers[0],
+            from: body.relayer,
             to: tokenAddress,
             data: func.encodeABI()
         };
@@ -112,7 +124,7 @@ module.exports.postMetaTx = async (req, reply) => {
         web3.eth.sendSignedTransaction(serializedTx).then((res) => {
             console.log("res => ", res)
         }).catch((err) => {
-            console.log("Error: Transaction has been reverted by the EVM:")
+            console.log(err)
         })
 
         const txHash = await web3.utils.sha3(serializedTx);
@@ -130,7 +142,8 @@ module.exports.postMetaTx = async (req, reply) => {
 
 function validateGet(params, body) {
     return new Promise((resolve, reject) => {
-
+        if (!isValidConfig())
+            reject(new Error("config is wrong"))
         if (!isValidToken(params))
             reject(new Error("token validation error"))
 
@@ -146,7 +159,7 @@ function validatePost(params, body) {
             reject(new Error("token validation error"))
         if (!sanitize(body))
             reject(new Error("sanitize error"))
-        if (!isValidRelayer(body.providers, privkey))
+        if (!isValidRelayer(body.relayer, privkey))
             reject(new Error("sender or tokenReceiver is not relayer"))
         if (!isValidMetaTx(body))
             reject(new Error("valid tx error"))
@@ -156,7 +169,7 @@ function validatePost(params, body) {
 }
 
 
-function isValidConfig(body) {
+function isValidConfig() {
     if (!userConf.gasPrice)
         return false
     if (!userConf.gasLimit)
@@ -170,10 +183,6 @@ function isValidConfig(body) {
     if (!isStringInteger(userConf.gasLimit))
         return false
     if (!ethConf.tokens instanceof Array)
-        return false
-    if (userConf.gasPrice !== body.inputs[0])
-        return false
-    if (userConf.gasLimit !== body.inputs[1])
         return false
     if (!isHex(userConf.tokenReceiver))
         return false
@@ -194,18 +203,21 @@ function isValidToken(params) {
     return true
 }
 
-function isValidRelayer(providers, privkey) {
+function isValidRelayer(relayer, privkey) {
+
     const sender = ethUtil.privateToAddress(privkey).toString('hex')
-    if (Buffer.from(providers[0].slice(2), 'hex').toString('hex') !== sender) {
+    if (Buffer.from(relayer.slice(2), 'hex').toString('hex') !== sender) {
         return false
     }
-    const tokenReceiver = Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
-    if (Buffer.from(providers[1].slice(2), 'hex').toString('hex') !== tokenReceiver)
-        return false
     return true;
 }
 
 function isValidMetaTx(body) {
+
+    if (userConf.gasPrice !== body.inputs[0])
+        return false
+    if (userConf.gasLimit !== body.inputs[1])
+        return false
     const from = Buffer.from(body.from.slice(2), 'hex')
     const to = Buffer.from(body.to.slice(2), "hex")
     const amount = Buffer.from(num2hex32(body.amount), 'hex')
@@ -215,10 +227,7 @@ function isValidMetaTx(body) {
         Buffer.from(num2hex32(body.inputs[2]), 'hex'),
         Buffer.from(num2hex32(body.inputs[3]), 'hex')
     ]
-    const providers = [
-        Buffer.from(body.providers[0].slice(2), 'hex'),
-        Buffer.from(body.providers[1].slice(2), 'hex')
-    ]
+    const relayer = Buffer.from(body.relayer.slice(2), 'hex')
 
     const v = Number(body.v)
     const r = Buffer.from(body.r.slice(2), 'hex')
@@ -236,8 +245,7 @@ function isValidMetaTx(body) {
             inputs[1],
             inputs[2],
             inputs[3],
-            providers[0],
-            providers[1]
+            relayer
         ])
     );
     const hash = ethUtil.keccak256(Buffer.concat([prefix, msg]))
@@ -261,7 +269,7 @@ function sanitize(body) {
         return false
     if (!body.inputs)
         return false
-    if (!body.providers)
+    if (!body.relayer)
         return false
     if (!body.v)
         return false
@@ -277,7 +285,7 @@ function sanitize(body) {
         return false
     if (!isValidArray(body.inputs, 4))
         return false
-    if (!isValidArray(body.providers, 2, "hexstring"))
+    if (!isHex(body.relayer))
         return false
     if (!isStringInteger(body.v))
         return false
