@@ -83,6 +83,13 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
+        const userNonce = await token.methods.getNonce(body.from).call()
+
+        const expected = new BN(userNonce).add(new BN("1"))
+
+        if (!expected.eq(new BN(body.inputs[3])))
+            throw boom.boomify(new Error(`nonce is not correct expected: ${expected}`))
+
         const func = await token.methods.transferMetaTx(
             body.from,
             body.to,
@@ -104,6 +111,7 @@ module.exports.postMetaTx = async (req, reply) => {
 
         if (new BN(estimateGas).mul(new BN(body.inputs[0])).gt(new BN(relayerBalanceWei)))
             throw boom.boomify(new Error("relayer hasn't enough balance of ether"))
+
 
         const nonce = await web3.eth.getTransactionCount(body.relayer)
 
