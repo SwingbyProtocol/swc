@@ -1,6 +1,6 @@
 version: "2"
 services:
-  swc:
+  daemon:
     build: .
     working_dir: /home/node/app
     environment:
