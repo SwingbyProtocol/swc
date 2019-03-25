@@ -30,6 +30,7 @@ ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 });
 let relayerBalanceWei
+let pools = {}
 console.log(`relayer == ${sender}`)
 
 module.exports.getMetaTx = async (req, reply) => {
@@ -71,6 +72,8 @@ module.exports.getMetaTx = async (req, reply) => {
 module.exports.postMetaTx = async (req, reply) => {
     try {
         const web3 = getWeb3()
+
+        //console.log(relayerBalanceWei)
 
         const params = req.params
         const body = req.body
@@ -129,13 +132,20 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const serializedTx = '0x' + tx.serialize().toString('hex')
 
-        web3.eth.sendSignedTransaction(serializedTx).then((res) => {
+        const txHash = '0x' + ethUtil.keccak256(serializedTx.slice(2)).toString('hex');
+
+        if (pools.length)
+
+        pools.push({
+            hash: txHash,
+            serializedTx: serializedTx
+        })
+
+        web3.eth.sendSignedTransaction(tx.serializedTx).then((res) => {
             console.log("res => ", res)
         }).catch((err) => {
             console.log(err)
         })
-
-        const txHash = await web3.utils.sha3(serializedTx);
 
         return {
             result: true,
