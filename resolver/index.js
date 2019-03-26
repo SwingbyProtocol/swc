@@ -23,7 +23,6 @@ module.exports.initWeb3 = () => {
     )
     instance.web3 = web3
     console.log(`web3 initialized ${eth.host} ${eth.port}`)
-
 }
 
 module.exports.initIPFS = () => {

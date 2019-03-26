@@ -38,7 +38,16 @@ module.exports.getMetaTx = async (req, reply) => {
         const web3 = getWeb3()
 
         const params = req.params
+        const query = req.query
         const body = req.body
+
+        if (!query.signer) {
+            throw boom.boomify(new Error("signer is not set"))
+        }
+
+        if (!isHex(query.signer)) {
+            throw boom.boomify(new Error("signer is not hexstring"))
+        }
 
         await validateGet(params, body)
 
@@ -48,6 +57,10 @@ module.exports.getMetaTx = async (req, reply) => {
         const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
         const tokenPrice = await token.methods.getEstimateTokenPrice(sender).call()
+
+        const userNonce = await token.methods.getNonce(query.signer).call()
+
+        const expected = new BN(userNonce).add(new BN("1"))
 
         relayerBalanceWei = await web3.eth.getBalance(sender)
 
@@ -60,6 +73,7 @@ module.exports.getMetaTx = async (req, reply) => {
                 tokenReceiver: ethUtil.toChecksumAddress(tokenReceiver),
                 gasPrice: userConf.gasPrice,
                 gasLimit: userConf.gasLimit,
+                nextNonce: expected.toString(),
                 tokenPrice: tokenPrice.toString()
             }
         }
@@ -136,10 +150,10 @@ module.exports.postMetaTx = async (req, reply) => {
 
         if (pools.length)
 
-        pools.push({
-            hash: txHash,
-            serializedTx: serializedTx
-        })
+            pools.push({
+                hash: txHash,
+                serializedTx: serializedTx
+            })
 
         web3.eth.sendSignedTransaction(tx.serializedTx).then((res) => {
             console.log("res => ", res)

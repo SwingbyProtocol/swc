@@ -6,8 +6,10 @@ info:
   contact:
     email: ""
 servers:
+  - url: http://35.247.144.116:3000/api/v1
   - url: http://localhost:3000/api/v1
     description: Localhost (uses test data)
+  
 
 paths:
   /status:
@@ -39,6 +41,11 @@ paths:
           schema:
             type: string
           description: The token address
+        - in: query
+          name: signer
+          schema:
+            type: string
+          description: transaction signer
       description: "test"
       tags:
         - Status
@@ -105,3 +112,5 @@ paths:
       responses:
         200:
           description: OK
+
+  /submitLenderTxRelay/{tokenAddress}:
