@@ -62,18 +62,25 @@ module.exports.getMetaTx = async (req, reply) => {
 
         const expected = new BN(userNonce).add(new BN("1"))
 
+        const latestBalance = await token.methods.balanceOf(query.signer).call()
+
         relayerBalanceWei = await web3.eth.getBalance(sender)
 
         return {
             result: true,
+            token: {
+                token: ethUtil.toChecksumAddress(tokenAddress)
+            },
+            signer: {
+                nextNonce: expected.toString(),
+                latestBalance: latestBalance.toString(),
+            },
             relayer: {
-                token: ethUtil.toChecksumAddress(tokenAddress),
                 relayer: sender,
                 relayerBalanceWei: relayerBalanceWei,
                 tokenReceiver: ethUtil.toChecksumAddress(tokenReceiver),
                 gasPrice: userConf.gasPrice,
                 gasLimit: userConf.gasLimit,
-                nextNonce: expected.toString(),
                 tokenPrice: tokenPrice.toString()
             }
         }
