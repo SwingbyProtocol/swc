@@ -9,7 +9,6 @@ servers:
   - url: http://35.247.144.116:3000/api/v1
   - url: http://localhost:3000/api/v1
     description: Localhost (uses test data)
-  
 
 paths:
   /status:
@@ -43,6 +42,7 @@ paths:
           description: The token address
         - in: query
           name: signer
+          required: true
           schema:
             type: string
           description: transaction signer
