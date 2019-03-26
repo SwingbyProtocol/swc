@@ -69,7 +69,7 @@ module.exports.getMetaTx = async (req, reply) => {
         return {
             result: true,
             token: {
-                token: ethUtil.toChecksumAddress(tokenAddress)
+                address: ethUtil.toChecksumAddress(tokenAddress)
             },
             signer: {
                 nextNonce: expected.toString(),
