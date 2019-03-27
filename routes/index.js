@@ -6,14 +6,19 @@ const keep = require('../controllers/keepCtrl')
 
 const routes = [{
         method: 'POST',
-        url: '/api/v1/metaTxRelay/:tokenAddress',
+        url: '/metaTxRelay/:tokenAddress',
         handler: relayer.postMetaTx
     },
     {
         method: 'GET',
-        url: '/api/v1/metaTxRelay/:tokenAddress',
+        url: '/metaTxRelay/:tokenAddress',
         handler: relayer.getMetaTx
     }
 ]
 
-module.exports = routes
+module.exports = function (fastify, opts, next) {
+    routes.forEach((route, index) => {
+        fastify.route(route)
+    })
+    next()
+}

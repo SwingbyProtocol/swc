@@ -8,9 +8,11 @@ const initWeb3 = require("./resolver").initWeb3
 initIPFS()
 initWeb3()
 
-routes.forEach((route, index) => {
-  fastify.route(route)
-})
+fastify.register(
+  require('./routes'), {
+    prefix: '/api/v1'
+  }
+)
 
 // Run the server!
 const start = async () => {

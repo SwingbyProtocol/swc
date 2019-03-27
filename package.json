@@ -10,14 +10,16 @@
   "author": "syrohei",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "boom": "^7.2.2",
+    "boom": "^7.3.0",
     "config": "^3.0.1",
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.1.0",
-    "fastify": "^1.13.0",
-    "fastify-swagger": "^0.15.3",
+    "fastify": "^2.1.0",
+    "fastify-cors": "^2.1.2",
+    "fastify-swagger": "^2.3.2",
     "ipfs-http-client": "^30.1.0",
-    "nodemon": "^1.18.7",
-    "web3": "^1.0.0-beta.48"
+    "nodemon": "^1.18.10",
+    "pino-pretty": "^2.5.0",
+    "web3": "^1.0.0-beta.50"
   }
 }
