@@ -9,8 +9,11 @@
     },
     "eth": {
         "bootstamp": [{
-            "host": "http://52.208.46.161",
-            "port": "8549"
+            "host": "ws://35.240.131.99",
+            "port": "8546"
+        }, {
+            "host": "wss://ropsten.infura.io/ws",
+            "port": ""
         }],
         "tokens": [{
             "name": "GOV",

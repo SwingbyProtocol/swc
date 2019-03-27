@@ -13,20 +13,35 @@ let instance = {
 }
 
 module.exports.initWeb3 = () => {
-    if (ethNodes.bootstamp.length == 0 || instance.web3 != null) {
+    if (ethNodes.bootstamp.length === 0 || instance.web3 !== null) {
         console.log('web3 is alreay initialized or something wrong')
         return false
     }
-    const eth = ethNodes.bootstamp[Math.floor(Math.random() * ethNodes.bootstamp.length)]
-    const web3 = new web3js(
-        new web3js.providers.HttpProvider(`${eth.host}:${eth.port}`)
-    )
-    instance.web3 = web3
-    console.log(`web3 initialized ${eth.host} ${eth.port}`)
+    const eth = ethNodes.bootstamp[Math.floor(Math.random() * Math.floor(ethNodes.bootstamp.length))]
+
+    const wss = eth.port == "" ? `${eth.host}` : `${eth.host}:${eth.port}`
+
+    const provider = new web3js.providers.WebsocketProvider(wss)
+
+    provider.on('connect', () => console.log(`web3 websock initialized ${eth.host}`))
+
+    provider.on('error', e => {
+        console.error('WS Error')
+        console.log(`web3 websock is not connect: error ${eth.host}`)
+    })
+    provider.on('close', e => {
+        console.error('WS Closed: instance reset')
+        instance.web3 = null
+    })
+    provider.on('end', e => {
+        console.error('WS Ended: instance reset')
+        instance.web3 = null
+    })
+    instance.web3 = new web3js(provider)
 }
 
 module.exports.initIPFS = () => {
-    if (ipfsNodes.bootstamp.length == 0 || instance.ipfs != null) {
+    if (ipfsNodes.bootstamp.length === 0 || instance.ipfs !== null) {
         console.log('ipfs is alreay initialized or something wrong')
         return false
     }
@@ -45,5 +60,8 @@ module.exports.getIPFS = () => {
 }
 
 module.exports.getWeb3 = () => {
+    if (instance.web3 === null) {
+        this.initWeb3()
+    }
     return instance.web3
 }

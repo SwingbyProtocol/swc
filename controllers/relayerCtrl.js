@@ -11,7 +11,7 @@ const ethConf = config.get("eth")
 const userConf = config.get("user")
 // Get Data Models
 const getWeb3 = require('../resolver').getWeb3
-const getIPFS = require('../resolver').getIPFSs
+//const getIPFS = require('../resolver').getIPFSs
 
 const SWINGBY_TX_TYPEHASH = "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
 
@@ -29,8 +29,10 @@ const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey
 ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 });
-let relayerBalanceWei
+let relayerBalanceWei = 0
 let pools = {}
+let tokens = {}
+
 console.log(`relayer == ${sender}`)
 
 module.exports.getMetaTx = async (req, reply) => {
@@ -52,19 +54,19 @@ module.exports.getMetaTx = async (req, reply) => {
         await validateGet(params, body)
 
         const tokenAddress = "0x" + Buffer.from(req.params.tokenAddress.slice(2), 'hex').toString('hex')
-        const token = new web3.eth.Contract(tokenAbi, tokenAddress)
 
         const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
-        const tokenPrice = await token.methods.getEstimateTokenPrice(sender).call()
+        if (!tokens[tokenAddress]) {
+            tokens[tokenAddress] = new web3.eth.Contract(tokenAbi, tokenAddress)
+        }
+        const tokenPrice = await tokens[tokenAddress].methods.getEstimateTokenPrice(sender).call()
 
-        const userNonce = await token.methods.getNonce(query.signer).call()
+        const userNonce = await tokens[tokenAddress].methods.getNonce(query.signer).call()
 
         const expected = new BN(userNonce).add(new BN("1"))
 
-        const latestBalance = await token.methods.balanceOf(query.signer).call()
-
-        relayerBalanceWei = await web3.eth.getBalance(sender)
+        const latestBalance = await tokens[tokenAddress].methods.balanceOf(query.signer).call()
 
         return {
             result: true,
@@ -72,12 +74,12 @@ module.exports.getMetaTx = async (req, reply) => {
                 address: ethUtil.toChecksumAddress(tokenAddress)
             },
             signer: {
+                address: query.signer,
                 nextNonce: expected.toString(),
                 latestBalance: latestBalance.toString(),
             },
             relayer: {
-                relayer: sender,
-                relayerBalanceWei: relayerBalanceWei,
+                address: sender,
                 tokenReceiver: ethUtil.toChecksumAddress(tokenReceiver),
                 gasPrice: userConf.gasPrice,
                 gasLimit: userConf.gasLimit,
@@ -126,6 +128,9 @@ module.exports.postMetaTx = async (req, reply) => {
             ethUtil.toChecksumAddress(tokenReceiver)
         )
 
+        const result = await func.call()
+        console.log(result)
+
         const estimateGas = await func.estimateGas({
             from: body.relayer,
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
@@ -162,11 +167,7 @@ module.exports.postMetaTx = async (req, reply) => {
                 serializedTx: serializedTx
             })
 
-        web3.eth.sendSignedTransaction(serializedTx).then((res) => {
-            console.log("res => ", res)
-        }).catch((err) => {
-            console.log(err)
-        })
+        const send = await web3.eth.sendSignedTransaction(serializedTx)
 
         return {
             result: true,

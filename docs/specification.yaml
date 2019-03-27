@@ -39,6 +39,7 @@ paths:
           required: true
           schema:
             type: string
+          example: "0x45e9932fd308346cb9157f8bf5937437bf39bb4c"
           description: The token address
         - in: query
           name: signer
@@ -52,6 +53,24 @@ paths:
       responses:
         200:
           description: GET
+          content:
+            application/json:
+              schema:
+                example:
+                  result: true
+                  token:
+                    address: "0x45E9932fD308346CB9157F8bF5937437Bf39BB4C"
+                  signer:
+                    address: "0xd2330a9f6dDe4715F540D1669bf75E89a1b4FbBc"
+                    nextNonce: "1"
+                    latestBalance: "118198599972998000000000000"
+                  relayer:
+                    address: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
+                    tokenReceiver: "0xCC8690540faE802A251945556817D49a96990f44"
+                    gasPrice: "4000000000"
+                    gasLimit: "200000"
+                    tokenPrice: "100000000000000000"
+
     post:
       parameters:
         - in: path
