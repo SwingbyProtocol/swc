@@ -26,7 +26,10 @@ const fastify = require('fastify')({
 
 const cors = require('fastify-cors')
 
-fastify.register(cors, { optionsSuccessStatus: 200 })
+fastify.register(cors, {
+    origin: false,
+    optionsSuccessStatus: 200
+})
 
 
 const fastifySwagger = require('fastify-swagger')

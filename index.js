@@ -9,7 +9,7 @@ initIPFS()
 initWeb3()
 
 fastify.register(
-  require('./routes'), {
+  routes, {
     prefix: '/api/v1'
   }
 )
