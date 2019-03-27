@@ -27,7 +27,7 @@ const fastify = require('fastify')({
 const cors = require('fastify-cors')
 
 fastify.register(cors, {
-    origin: true,
+    origin: '*',
     optionsSuccessStatus: 200
 })
 
