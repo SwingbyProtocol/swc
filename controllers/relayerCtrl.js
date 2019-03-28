@@ -169,7 +169,11 @@ module.exports.postMetaTx = async (req, reply) => {
                 serializedTx: serializedTx
             })
 
-        const send = await web3.eth.sendSignedTransaction(serializedTx)
+        web3.eth.sendSignedTransaction(serializedTx).then((result) => {
+            console.log(result)
+        }).catch((err) => {
+            console.log(err)
+        })
 
         return {
             result: true,
