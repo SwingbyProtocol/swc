@@ -2,8 +2,9 @@
 
 const fastify = require("./fastify")
 const routes = require("./routes")
-const initIPFS = require("./resolver").initIPFS
-const initWeb3 = require("./resolver").initWeb3
+const resolvers = require("./resolvers")
+const initIPFS = resolvers.api.initIPFS
+const initWeb3 = resolvers.api.initWeb3
 
 initIPFS()
 initWeb3()

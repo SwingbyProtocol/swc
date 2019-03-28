@@ -10,7 +10,7 @@ const tokenAbi = TokenContract.abi
 const ethConf = config.get("eth")
 const userConf = config.get("user")
 // Get Data Models
-const getWeb3 = require('../resolver').getWeb3
+const getWeb3 = require('../resolvers').api.getWeb3
 //const getIPFS = require('../resolver').getIPFSs
 
 const SWINGBY_TX_TYPEHASH = "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
@@ -29,9 +29,9 @@ const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey
 ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 });
-let relayerBalanceWei = 0
 let pools = {}
 let tokens = {}
+let estimateGas = 0
 
 console.log(`relayer == ${sender}`)
 
@@ -60,13 +60,15 @@ module.exports.getMetaTx = async (req, reply) => {
         if (!tokens[tokenAddress]) {
             tokens[tokenAddress] = new web3.eth.Contract(tokenAbi, tokenAddress)
         }
-        const tokenPrice = await tokens[tokenAddress].methods.getEstimateTokenPrice(sender).call()
 
-        const userNonce = await tokens[tokenAddress].methods.getNonce(query.signer).call()
+        const batch = []
+        batch.push(tokens[tokenAddress].methods.getEstimateTokenPrice(sender).call())
+        batch.push(tokens[tokenAddress].methods.getNonce(query.signer).call())
+        batch.push(tokens[tokenAddress].methods.balanceOf(query.signer).call())
 
-        const expected = new BN(userNonce).add(new BN("1"))
+        let calls = await Promise.all(batch)
 
-        const latestBalance = await tokens[tokenAddress].methods.balanceOf(query.signer).call()
+        const expected = new BN(calls[1]).add(new BN("1"))
 
         return {
             result: true,
@@ -76,14 +78,14 @@ module.exports.getMetaTx = async (req, reply) => {
             signer: {
                 address: query.signer,
                 nextNonce: expected.toString(),
-                latestBalance: latestBalance.toString(),
+                latestBalance: calls[2].toString(),
             },
             relayer: {
                 address: sender,
                 tokenReceiver: ethUtil.toChecksumAddress(tokenReceiver),
                 gasPrice: userConf.gasPrice,
                 gasLimit: userConf.gasLimit,
-                tokenPrice: tokenPrice.toString()
+                tokenPrice: calls[0].toString()
             }
         }
 
@@ -96,6 +98,8 @@ module.exports.postMetaTx = async (req, reply) => {
     try {
         const web3 = getWeb3()
 
+        console.log(`current provider: ${web3.currentProvider}`)
+
         //console.log(relayerBalanceWei)
 
         const params = req.params
@@ -105,18 +109,13 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const tokenAddress = params.tokenAddress
 
-        const token = new web3.eth.Contract(tokenAbi, tokenAddress)
-
         const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
-        const userNonce = await token.methods.getNonce(body.from).call()
+        if (!tokens[tokenAddress]) {
+            tokens[tokenAddress] = new web3.eth.Contract(tokenAbi, tokenAddress)
+        }
 
-        const expected = new BN(userNonce).add(new BN("1"))
-
-        if (!expected.eq(new BN(body.inputs[3])))
-            throw boom.boomify(new Error(`nonce is not correct expected: ${expected}`))
-
-        const func = await token.methods.transferMetaTx(
+        const func = await tokens[tokenAddress].methods.transferMetaTx(
             body.from,
             body.to,
             body.amount,
@@ -128,26 +127,32 @@ module.exports.postMetaTx = async (req, reply) => {
             ethUtil.toChecksumAddress(tokenReceiver)
         )
 
-        //const result = await func.call()
-        //console.log(result)
-
-        const estimateGas = await func.estimateGas({
+        estimateGas = await func.estimateGas({
             from: body.relayer,
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
             gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
         })
+
         console.log("estimateGas => ", estimateGas)
 
-        const relayerBalanceWei = await token.methods.balanceOf(body.relayer).call()
+        const batch = []
+        batch.push(web3.eth.getBalance(body.relayer))
+        batch.push(tokens[tokenAddress].methods.getNonce(body.from).call())
+        batch.push(web3.eth.getTransactionCount(body.relayer))
 
-        if (new BN(estimateGas).mul(new BN(body.inputs[0])).gt(new BN(relayerBalanceWei)))
+        const calls = await Promise.all(batch)
+
+        // gas * gasPrice
+        if (new BN(estimateGas).mul(new BN(body.inputs[0])).gt(new BN(calls[0])))
             throw boom.boomify(new Error("relayer hasn't enough balance of ether"))
 
+        const expected = new BN(calls[1]).add(new BN("1"))
 
-        const nonce = await web3.eth.getTransactionCount(body.relayer)
+        if (!expected.eq(new BN(body.inputs[3])))
+            throw boom.boomify(new Error(`nonce is not correct expected: ${expected}`))
 
         const txParams = {
-            nonce: '0x' + nonce.toString(16),
+            nonce: '0x' + calls[2].toString(16),
             gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
             gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
             from: body.relayer,
@@ -163,7 +168,6 @@ module.exports.postMetaTx = async (req, reply) => {
         const txHash = '0x' + ethUtil.keccak256(serializedTx.slice(2)).toString('hex');
 
         if (pools.length)
-
             pools.push({
                 hash: txHash,
                 serializedTx: serializedTx
