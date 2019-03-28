@@ -128,8 +128,8 @@ module.exports.postMetaTx = async (req, reply) => {
             ethUtil.toChecksumAddress(tokenReceiver)
         )
 
-        const result = await func.call()
-        console.log(result)
+        //const result = await func.call()
+        //console.log(result)
 
         const estimateGas = await func.estimateGas({
             from: body.relayer,
