@@ -138,6 +138,8 @@ module.exports.postMetaTx = async (req, reply) => {
         })
         console.log("estimateGas => ", estimateGas)
 
+        const relayerBalanceWei = await token.methods.balanceOf(body.relayer).call()
+
         if (new BN(estimateGas).mul(new BN(body.inputs[0])).gt(new BN(relayerBalanceWei)))
             throw boom.boomify(new Error("relayer hasn't enough balance of ether"))
 
