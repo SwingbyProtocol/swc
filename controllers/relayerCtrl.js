@@ -9,9 +9,7 @@ const TokenContract = require('../build/contracts/Token.json')
 const tokenAbi = TokenContract.abi
 const ethConf = config.get("eth")
 const relayerConf = config.get("relayer")
-// Get Data Models
 const getWeb3 = require('../resolvers').api.getWeb3
-//const getIPFS = require('../resolver').getIPFSs
 
 const SWINGBY_TX_TYPEHASH = "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
 
