@@ -16,28 +16,28 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x6080604052348015600f57600080fd5b5060bf8061001e6000396000f3fe608060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063881967f9146044575b600080fd5b348015604f57600080fd5b506056606c565b6040518082815260200191505060405180910390f35b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a72305820a751a77cf0e69731c305ddce7a7667ec991bdd9d2ee698f4ee09609062be353f0029",
-  "deployedBytecode": "0x608060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063881967f9146044575b600080fd5b348015604f57600080fd5b506056606c565b6040518082815260200191505060405180910390f35b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a72305820a751a77cf0e69731c305ddce7a7667ec991bdd9d2ee698f4ee09609062be353f0029",
+  "bytecode": "0x6080604052348015600f57600080fd5b5060b98061001e6000396000f3fe6080604052600436106039576000357c010000000000000000000000000000000000000000000000000000000090048063881967f914603e575b600080fd5b348015604957600080fd5b5060506066565b6040518082815260200191505060405180910390f35b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a723058204811696709326a2ac0dd2f2de5a4f256ab4b826e91476357fb1bed04cb7fbc2c0029",
+  "deployedBytecode": "0x6080604052600436106039576000357c010000000000000000000000000000000000000000000000000000000090048063881967f914603e575b600080fd5b348015604957600080fd5b5060506066565b6040518082815260200191505060405180910390f35b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a723058204811696709326a2ac0dd2f2de5a4f256ab4b826e91476357fb1bed04cb7fbc2c0029",
   "sourceMap": "62:275:12:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;62:275:12;;;;;;;",
-  "deployedSourceMap": "62:275:12:-;;;;;;;;;;;;;;;;;;;;;;;;221:112;;8:9:-1;5:2;;;30:1;27;20:12;5:2;221:112:12;;;;;;;;;;;;;;;;;;;;;;;;267:66;221:112;;;:::o",
-  "source": "pragma solidity 0.5.0;\n\n/**\n * @title Constant \n * @dev \n */\n\ncontract Constant { \n    // Swingby Tx hash type\n    //keccak256(\n    //    \"SwingbyTx(address _from,address _to,uint256 _amount,uint256 _nonce)\"\n    //);\n    bytes32 public constant SWINGBY_TX_TYPEHASH = 0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b;\n\n}",
+  "deployedSourceMap": "62:275:12:-;;;;;;;;;;;;;;;;;;;;;;221:112;;8:9:-1;5:2;;;30:1;27;20:12;5:2;221:112:12;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;267:66;221:112;;;:::o",
+  "source": "pragma solidity 0.5.1;\n\n/**\n * @title Constant \n * @dev \n */\n\ncontract Constant { \n    // Swingby Tx hash type\n    //keccak256(\n    //    \"SwingbyTx(address _from,address _to,uint256 _amount,uint256 _nonce)\"\n    //);\n    bytes32 public constant SWINGBY_TX_TYPEHASH = 0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b;\n\n}",
   "sourcePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
   "ast": {
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
     "exportedSymbols": {
       "Constant": [
-        2766
+        2763
       ]
     },
-    "id": 2767,
+    "id": 2764,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2762,
+        "id": 2759,
         "literals": [
           "solidity",
           "0.5",
-          ".0"
+          ".1"
         ],
         "nodeType": "PragmaDirective",
         "src": "0:22:12"
@@ -48,19 +48,19 @@
         "contractKind": "contract",
         "documentation": "@title Constant \n@dev ",
         "fullyImplemented": true,
-        "id": 2766,
+        "id": 2763,
         "linearizedBaseContracts": [
-          2766
+          2763
         ],
         "name": "Constant",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2765,
+            "id": 2762,
             "name": "SWINGBY_TX_TYPEHASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2766,
+            "scope": 2763,
             "src": "221:112:12",
             "stateVariable": true,
             "storageLocation": "default",
@@ -69,7 +69,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2763,
+              "id": 2760,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "221:7:12",
@@ -81,7 +81,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831393961613134363532333330343736306138383039326565316464333338613638663130313835333735383237663165383338616235653962643136323262",
-              "id": 2764,
+              "id": 2761,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -99,7 +99,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 2767,
+        "scope": 2764,
         "src": "62:275:12"
       }
     ],
@@ -109,18 +109,18 @@
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
     "exportedSymbols": {
       "Constant": [
-        2766
+        2763
       ]
     },
-    "id": 2767,
+    "id": 2764,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2762,
+        "id": 2759,
         "literals": [
           "solidity",
           "0.5",
-          ".0"
+          ".1"
         ],
         "nodeType": "PragmaDirective",
         "src": "0:22:12"
@@ -131,19 +131,19 @@
         "contractKind": "contract",
         "documentation": "@title Constant \n@dev ",
         "fullyImplemented": true,
-        "id": 2766,
+        "id": 2763,
         "linearizedBaseContracts": [
-          2766
+          2763
         ],
         "name": "Constant",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2765,
+            "id": 2762,
             "name": "SWINGBY_TX_TYPEHASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2766,
+            "scope": 2763,
             "src": "221:112:12",
             "stateVariable": true,
             "storageLocation": "default",
@@ -152,7 +152,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2763,
+              "id": 2760,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "221:7:12",
@@ -164,7 +164,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831393961613134363532333330343736306138383039326565316464333338613638663130313835333735383237663165383338616235653962643136323262",
-              "id": 2764,
+              "id": 2761,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -182,7 +182,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 2767,
+        "scope": 2764,
         "src": "62:275:12"
       }
     ],
@@ -190,11 +190,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+    "version": "0.5.1+commit.c8a2cb62.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-21T17:41:37.859Z",
+  "schemaVersion": "3.0.5",
+  "updatedAt": "2019-03-23T08:45:58.532Z",
   "devdoc": {
     "methods": {},
     "title": "Constant "

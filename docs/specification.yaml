@@ -8,7 +8,7 @@ info:
 servers:
   - url: http://35.247.144.116:3000/api/v1
   - url: http://localhost:3000/api/v1
-    description: Localhost (uses test data)
+    description: Dev
 
 paths:
   /status:
@@ -39,7 +39,7 @@ paths:
           required: true
           schema:
             type: string
-          example: "0x45e9932fd308346cb9157f8bf5937437bf39bb4c"
+          example: "0xE17A43439B750F742c7e2D675D272EE15F8BE638"
           description: The token address
         - in: query
           name: signer

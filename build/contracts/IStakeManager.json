@@ -196,7 +196,7 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.5.0;\n\n/**\n * @title IStakeManager interface\n * @dev \n */\n/* interface */  \n\ncontract IStakeManager { \n   \n    function isValidWitnessConsortium(address who) public returns (bool);\n\n    function approve(address spender, uint256 value) public returns (bool);\n\n    function transferFrom(address from, address to, uint256 value) public returns (bool);\n\n    function mint(address _to, uint256 _amount) public returns (bool);\n\n    function totalSupply() public view returns (uint256);\n    \n    function balanceOf(address who) public view returns (uint256);\n\n    function allowance(address owner, address spender) public view returns (uint256);\n\n    function name() public view returns (string memory);\n\n    function symbol() public view returns (string memory);\n\n    function decimals() public view returns (uint8);\n}",
+  "source": "pragma solidity 0.5.1;\n\n/**\n * @title IStakeManager interface\n * @dev \n */\n/* interface */  \n\ncontract IStakeManager { \n   \n    function isValidWitnessConsortium(address who) public returns (bool);\n\n    function approve(address spender, uint256 value) public returns (bool);\n\n    function transferFrom(address from, address to, uint256 value) public returns (bool);\n\n    function mint(address _to, uint256 _amount) public returns (bool);\n\n    function totalSupply() public view returns (uint256);\n    \n    function balanceOf(address who) public view returns (uint256);\n\n    function allowance(address owner, address spender) public view returns (uint256);\n\n    function name() public view returns (string memory);\n\n    function symbol() public view returns (string memory);\n\n    function decimals() public view returns (uint8);\n}",
   "sourcePath": "/Users/sengayusaku/repo/btc2eth1/contracts/IStakeManager.sol",
   "ast": {
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/IStakeManager.sol",
@@ -213,7 +213,7 @@
         "literals": [
           "solidity",
           "0.5",
-          ".0"
+          ".1"
         ],
         "nodeType": "PragmaDirective",
         "src": "0:22:1"
@@ -1093,7 +1093,7 @@
         "literals": [
           "solidity",
           "0.5",
-          ".0"
+          ".1"
         ],
         "nodeType": "PragmaDirective",
         "src": "0:22:1"
@@ -1960,11 +1960,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+    "version": "0.5.1+commit.c8a2cb62.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.2",
-  "updatedAt": "2019-03-21T17:41:37.843Z",
+  "schemaVersion": "3.0.5",
+  "updatedAt": "2019-03-23T08:48:07.236Z",
   "devdoc": {
     "methods": {},
     "title": "IStakeManager interface"

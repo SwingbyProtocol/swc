@@ -4,8 +4,8 @@ const ihc = require('ipfs-http-client')
 const web3js = require('web3')
 const config = require('config');
 
-const ethNodes = config.get("eth")
-const ipfsNodes = config.get("ipfs")
+const ethConf = config.get("eth")
+const ipfsConf = config.get("ipfs")
 
 let instance = {
     web3: null,
@@ -13,11 +13,11 @@ let instance = {
 }
 
 module.exports.initWeb3 = () => {
-    if (ethNodes.bootstamp.length === 0 || instance.web3 !== null) {
+    if (ethConf.nodes.length === 0 || instance.web3 !== null) {
         console.log('web3 is alreay initialized or something wrong')
         return false
     }
-    const eth = ethNodes.bootstamp[Math.floor(Math.random() * Math.floor(ethNodes.bootstamp.length))]
+    const eth = ethConf.nodes[Math.floor(Math.random() * Math.floor(ethConf.nodes.length))]
 
     const wss = eth.port == "" ? `${eth.host}` : `${eth.host}:${eth.port}`
 
@@ -41,11 +41,11 @@ module.exports.initWeb3 = () => {
 }
 
 module.exports.initIPFS = () => {
-    if (ipfsNodes.bootstamp.length === 0 || instance.ipfs !== null) {
+    if (ipfsConf.nodes.length === 0 || instance.ipfs !== null) {
         console.log('ipfs is alreay initialized or something wrong')
         return false
     }
-    const ipfs = ipfsNodes.bootstamp[Math.floor(Math.random() * ipfsNodes.bootstamp.length)]
+    const ipfs = ipfsConf.nodes[Math.floor(Math.random() * ipfsConf.nodes.length)]
     var ipfsObj = ihc({
         host: ipfs.host,
         port: ipfs.port,

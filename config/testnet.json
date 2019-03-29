@@ -1,6 +1,6 @@
 {
     "ipfs": {
-        "bootstamp": [{
+        "nodes": [{
                 "host": "localhost",
                 "port": "5001"
             }
@@ -8,19 +8,19 @@
         ]
     },
     "eth": {
-        "bootstamp": [{
-            "host": "ws://35.240.131.99",
+        "nodes": [{
+            "host": "ws://35.201.148.120",
             "port": "8546"
         }, {
-            "host": "wss://ropsten.infura.io/ws",
+            "host": "wss://goerli.infura.io/ws/v3/c2f0a8b07b5747b19200a97f41f1949b",
             "port": ""
         }],
         "tokens": [{
             "name": "GOV",
-            "address": "0x45e9932fd308346cb9157f8bf5937437bf39bb4c"
+            "address": "0xE17A43439B750F742c7e2D675D272EE15F8BE638"
         }]
     },
-    "user": {
+    "relayer": {
         "gasPrice": "4000000000",
         "gasLimit": "200000",
         "tokenReceiver": "0xCC8690540faE802A251945556817D49a96990f44"

@@ -1,6 +1,6 @@
 {
     "ipfs": {
-        "bootstamp": [{
+        "nodes": [{
                 "host": "localhost",
                 "port": "5001"
             }
@@ -8,16 +8,16 @@
         ]
     },
     "eth": {
-        "bootstamp": [{
-            "host": "http://localhost",
+        "nodes": [{
+            "host": "ws://localhost",
             "port": "8545"
         }],
         "tokens": [{
             "name": "GOV",
-            "address": "0x1EE1e8d5f1785593415638564b631f51Ce6Bd1AB"
+            "address": "0x45e9932fd308346cb9157f8bf5937437bf39bb4c"
         }]
     },
-    "user": {
+    "relayer": {
         "gasPrice": "4000000000",
         "gasLimit": "200000",
         "tokenReceiver": "0xCC8690540faE802A251945556817D49a96990f44"

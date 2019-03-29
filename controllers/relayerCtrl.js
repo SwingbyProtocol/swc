@@ -2,13 +2,13 @@
 
 const boom = require('boom')
 const ethUtil = require('ethereumjs-util')
+const BN = ethUtil.BN
 const config = require('config')
 const Tx = require('ethereumjs-tx')
-const BN = require('bn.js')
 const TokenContract = require('../build/contracts/Token.json')
 const tokenAbi = TokenContract.abi
 const ethConf = config.get("eth")
-const userConf = config.get("user")
+const relayerConf = config.get("relayer")
 // Get Data Models
 const getWeb3 = require('../resolvers').api.getWeb3
 //const getIPFS = require('../resolver').getIPFSs
@@ -29,7 +29,7 @@ const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey
 ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 });
-let pools = {}
+let txs = {}
 let tokens = {}
 let estimateGas = 0
 
@@ -55,7 +55,7 @@ module.exports.getMetaTx = async (req, reply) => {
 
         const tokenAddress = "0x" + Buffer.from(req.params.tokenAddress.slice(2), 'hex').toString('hex')
 
-        const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
+        const tokenReceiver = "0x" + Buffer.from(relayerConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
         if (!tokens[tokenAddress]) {
             tokens[tokenAddress] = new web3.eth.Contract(tokenAbi, tokenAddress)
@@ -68,7 +68,7 @@ module.exports.getMetaTx = async (req, reply) => {
 
         let calls = await Promise.all(batch)
 
-        const expected = new BN(calls[1]).add(new BN("1"))
+        const expected = new BN(calls[1].toString()).add(new BN('1')) // BigNumber not BN
 
         return {
             result: true,
@@ -78,14 +78,14 @@ module.exports.getMetaTx = async (req, reply) => {
             signer: {
                 address: query.signer,
                 nextNonce: expected.toString(),
-                latestBalance: calls[2].toString(),
+                latestBalance: new BN(calls[2].toString()).toString(),
             },
             relayer: {
                 address: sender,
                 tokenReceiver: ethUtil.toChecksumAddress(tokenReceiver),
-                gasPrice: userConf.gasPrice,
-                gasLimit: userConf.gasLimit,
-                tokenPrice: calls[0].toString()
+                gasPrice: relayerConf.gasPrice,
+                gasLimit: relayerConf.gasLimit,
+                tokenPrice: new BN(calls[0].toString()).toString()
             }
         }
 
@@ -98,7 +98,7 @@ module.exports.postMetaTx = async (req, reply) => {
     try {
         const web3 = getWeb3()
 
-        console.log(`current provider: ${web3.currentProvider}`)
+        console.log(`current provider: ${web3.currentProvider.host}`)
 
         //console.log(relayerBalanceWei)
 
@@ -109,7 +109,7 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const tokenAddress = params.tokenAddress
 
-        const tokenReceiver = "0x" + Buffer.from(userConf.tokenReceiver.slice(2), 'hex').toString('hex')
+        const tokenReceiver = "0x" + Buffer.from(relayerConf.tokenReceiver.slice(2), 'hex').toString('hex')
 
         if (!tokens[tokenAddress]) {
             tokens[tokenAddress] = new web3.eth.Contract(tokenAbi, tokenAddress)
@@ -127,11 +127,12 @@ module.exports.postMetaTx = async (req, reply) => {
             ethUtil.toChecksumAddress(tokenReceiver)
         )
 
-        estimateGas = await func.estimateGas({
-            from: body.relayer,
-            gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
-            gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
-        })
+        if (!estimateGas)
+            estimateGas = await func.estimateGas({
+                from: body.relayer,
+                gasPrice: ethUtil.bufferToHex(new BN(body.inputs[0]).toBuffer()),
+                gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
+            })
 
         console.log("estimateGas => ", estimateGas)
 
@@ -143,10 +144,10 @@ module.exports.postMetaTx = async (req, reply) => {
         const calls = await Promise.all(batch)
 
         // gas * gasPrice
-        if (new BN(estimateGas).mul(new BN(body.inputs[0])).gt(new BN(calls[0])))
+        if (new BN(estimateGas.toString()).mul(new BN(body.inputs[0])).gt(new BN(calls[0].toString())))
             throw boom.boomify(new Error("relayer hasn't enough balance of ether"))
 
-        const expected = new BN(calls[1]).add(new BN("1"))
+        const expected = new BN(calls[1].toString()).add(new BN("1"))
 
         if (!expected.eq(new BN(body.inputs[3])))
             throw boom.boomify(new Error(`nonce is not correct expected: ${expected}`))
@@ -157,7 +158,8 @@ module.exports.postMetaTx = async (req, reply) => {
             gasLimit: ethUtil.bufferToHex(new BN("80000").add(new BN(body.inputs[1])).toBuffer()),
             from: body.relayer,
             to: tokenAddress,
-            data: func.encodeABI()
+            data: func.encodeABI(),
+            chainId: process.env.NODE_ENV === 'mainnet' ? 0 : 5
         };
 
         var tx = new Tx(txParams);
@@ -165,19 +167,13 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const serializedTx = '0x' + tx.serialize().toString('hex')
 
-        const txHash = '0x' + ethUtil.keccak256(serializedTx.slice(2)).toString('hex');
+        if (txs[serializedTx]) {
+            throw boom.boomify(new Error("tx is already sent"))
+        }
 
-        if (pools.length)
-            pools.push({
-                hash: txHash,
-                serializedTx: serializedTx
-            })
+        const txHash = await handleSend(web3, serializedTx)
 
-        web3.eth.sendSignedTransaction(serializedTx).then((result) => {
-            console.log(result)
-        }).catch((err) => {
-            console.log(err)
-        })
+        txs[serializedTx] = txHash
 
         return {
             result: true,
@@ -188,6 +184,21 @@ module.exports.postMetaTx = async (req, reply) => {
     } catch (err) {
         throw boom.boomify(err)
     }
+}
+
+function handleSend(web3, serializedTx) {
+    return new Promise((resolve, reject) => {
+        web3.eth.sendSignedTransaction(serializedTx)
+            .on('transactionHash', (txHash) => {
+                resolve(txHash)
+            })
+            .on('error', function (err) {
+                reject(err)
+            })
+            .on('confirmation', function (confirmationNumber, receipt) {
+                console.log(confirmationNumber, receipt)
+            })
+    })
 }
 
 function validateGet(params, body) {
@@ -220,21 +231,21 @@ function validatePost(params, body) {
 
 
 function isValidConfig() {
-    if (!userConf.gasPrice)
+    if (!relayerConf.gasPrice)
         return false
-    if (!userConf.gasLimit)
+    if (!relayerConf.gasLimit)
         return false
     if (!ethConf.tokens)
         return false
-    if (!userConf.tokenReceiver)
+    if (!relayerConf.tokenReceiver)
         return false
-    if (!isStringInteger(userConf.gasPrice))
+    if (!isStringInteger(relayerConf.gasPrice))
         return false
-    if (!isStringInteger(userConf.gasLimit))
+    if (!isStringInteger(relayerConf.gasLimit))
         return false
     if (!ethConf.tokens instanceof Array)
         return false
-    if (!isHex(userConf.tokenReceiver))
+    if (!isHex(relayerConf.tokenReceiver))
         return false
     return true
 }
@@ -264,9 +275,9 @@ function isValidRelayer(relayer, privkey) {
 
 function isValidMetaTx(body) {
 
-    if (userConf.gasPrice !== body.inputs[0])
+    if (relayerConf.gasPrice !== body.inputs[0])
         return false
-    if (userConf.gasLimit !== body.inputs[1])
+    if (relayerConf.gasLimit !== body.inputs[1])
         return false
     const from = Buffer.from(body.from.slice(2), 'hex')
     const to = Buffer.from(body.to.slice(2), "hex")
