@@ -6,12 +6,12 @@ const keep = require('../controllers/keepCtrl')
 
 const routes = [{
         method: 'POST',
-        url: '/metaTxRelay/:tokenAddress',
+        url: '/metaTxRelay/:gasToken',
         handler: relayer.postMetaTx
     },
     {
         method: 'GET',
-        url: '/metaTxRelay/:tokenAddress',
+        url: '/metaTxRelay/:gasToken',
         handler: relayer.getMetaTx
     }
 ]

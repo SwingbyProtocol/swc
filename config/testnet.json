@@ -15,14 +15,16 @@
             "host": "wss://goerli.infura.io/ws/v3/c2f0a8b07b5747b19200a97f41f1949b",
             "port": ""
         }],
+        "caller": {
+            "address": "0x49E3bb53fe7F43117F8136A584Dbd91979047aDF"
+        },
         "tokens": [{
-            "name": "GOV",
-            "address": "0xE17A43439B750F742c7e2D675D272EE15F8BE638"
+            "name": "tUSDC",
+            "address": "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
         }]
     },
     "relayer": {
-        "gasPrice": "4000000000",
-        "gasLimit": "200000",
-        "tokenReceiver": "0xCC8690540faE802A251945556817D49a96990f44"
+        "gasPrice": "3000000000",
+        "safeTxGas": "1200000"
     }
 }

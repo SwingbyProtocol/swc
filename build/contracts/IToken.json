@@ -107,79 +107,6 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_tokenPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "getEstimateTokenPrice",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_from",
-          "type": "address"
-        }
-      ],
-      "name": "getNonce",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_from",
-          "type": "address"
-        },
-        {
-          "name": "_to",
-          "type": "address"
-        },
-        {
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "name": "_inputs",
-          "type": "uint256[4]"
-        },
-        {
-          "name": "_relayer",
-          "type": "address"
-        }
-      ],
-      "name": "getTransactionHash",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bytes32"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "pure",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
           "name": "_to",
           "type": "address"
         },
@@ -203,29 +130,6 @@
       "constant": true,
       "inputs": [
         {
-          "name": "_gasPrice",
-          "type": "uint256"
-        },
-        {
-          "name": "_tokenPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "maxFees",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
           "name": "who",
           "type": "address"
         }
@@ -239,57 +143,6 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_from",
-          "type": "address"
-        },
-        {
-          "name": "_to",
-          "type": "address"
-        },
-        {
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "name": "_inputs",
-          "type": "uint256[4]"
-        },
-        {
-          "name": "_relayer",
-          "type": "address"
-        },
-        {
-          "name": "_v",
-          "type": "uint8"
-        },
-        {
-          "name": "_r",
-          "type": "bytes32"
-        },
-        {
-          "name": "_s",
-          "type": "bytes32"
-        },
-        {
-          "name": "_tokenReceiver",
-          "type": "address"
-        }
-      ],
-      "name": "transferMetaTx",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -367,25 +220,6 @@
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "setEstimateTokenPrice",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "constant": true,
       "inputs": [
         {
@@ -451,51 +285,41 @@
       "type": "function"
     }
   ],
+  "metadata": "",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.5.1;\n\nimport \"./IERC20MetaTx.sol\";\nimport \"./IERC20Base.sol\";\n\n/**\n * @title IToken interface\n * @dev \n */\n/* interface */  \n\ncontract IToken is IERC20MetaTx, IERC20Base { \n\n    function name() public view returns (string memory);\n\n    function symbol() public view returns (string memory);\n\n    function decimals() public view returns (uint8);\n}",
+  "source": "pragma solidity 0.5.1;\n\nimport \"./IERC20Base.sol\";\n\n/**\n * @title Token Interface\n * @dev Implementation of the Token Interface\n */\n\ncontract IToken is IERC20Base {\n\n    function name() public view returns (string memory);\n\n    function symbol() public view returns (string memory);\n\n    function decimals() public view returns (uint8);\n}",
   "sourcePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IToken.sol",
   "ast": {
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IToken.sol",
     "exportedSymbols": {
       "IToken": [
-        2642
+        3019
       ]
     },
-    "id": 2643,
+    "id": 3020,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2620,
+        "id": 3000,
         "literals": [
           "solidity",
           "0.5",
           ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:22:10"
-      },
-      {
-        "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IERC20MetaTx.sol",
-        "file": "./IERC20MetaTx.sol",
-        "id": 2621,
-        "nodeType": "ImportDirective",
-        "scope": 2643,
-        "sourceUnit": 2619,
-        "src": "24:28:10",
-        "symbolAliases": [],
-        "unitAlias": ""
+        "src": "0:22:13"
       },
       {
         "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IERC20Base.sol",
         "file": "./IERC20Base.sol",
-        "id": 2622,
+        "id": 3001,
         "nodeType": "ImportDirective",
-        "scope": 2643,
-        "sourceUnit": 2544,
-        "src": "53:26:10",
+        "scope": 3020,
+        "sourceUnit": 2999,
+        "src": "24:26:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -505,53 +329,33 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2623,
-              "name": "IERC20MetaTx",
-              "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2618,
-              "src": "163:12:10",
-              "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC20MetaTx_$2618",
-                "typeString": "contract IERC20MetaTx"
-              }
-            },
-            "id": 2624,
-            "nodeType": "InheritanceSpecifier",
-            "src": "163:12:10"
-          },
-          {
-            "arguments": null,
-            "baseName": {
-              "contractScope": null,
-              "id": 2625,
+              "id": 3002,
               "name": "IERC20Base",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2543,
-              "src": "177:10:10",
+              "referencedDeclaration": 2998,
+              "src": "152:10:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC20Base_$2543",
+                "typeIdentifier": "t_contract$_IERC20Base_$2998",
                 "typeString": "contract IERC20Base"
               }
             },
-            "id": 2626,
+            "id": 3003,
             "nodeType": "InheritanceSpecifier",
-            "src": "177:10:10"
+            "src": "152:10:13"
           }
         ],
         "contractDependencies": [
-          2495,
-          2543,
-          2618
+          2950,
+          2998
         ],
         "contractKind": "contract",
-        "documentation": "@title IToken interface\n@dev ",
+        "documentation": "@title Token Interface\n@dev Implementation of the Token Interface",
         "fullyImplemented": false,
-        "id": 2642,
+        "id": 3019,
         "linearizedBaseContracts": [
-          2642,
-          2543,
-          2495,
-          2618
+          3019,
+          2998,
+          2950
         ],
         "name": "IToken",
         "nodeType": "ContractDefinition",
@@ -559,29 +363,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2631,
+            "id": 3008,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "name",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2627,
+              "id": 3004,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "209:2:10"
+              "src": "183:2:13"
             },
             "returnParameters": {
-              "id": 2630,
+              "id": 3007,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2629,
+                  "id": 3006,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2631,
-                  "src": "233:13:10",
+                  "scope": 3008,
+                  "src": "207:13:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -589,10 +393,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2628,
+                    "id": 3005,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "233:6:10",
+                    "src": "207:6:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -602,10 +406,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "232:15:10"
+              "src": "206:15:13"
             },
-            "scope": 2642,
-            "src": "196:52:10",
+            "scope": 3019,
+            "src": "170:52:13",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
@@ -613,29 +417,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2636,
+            "id": 3013,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "symbol",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2632,
+              "id": 3009,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "269:2:10"
+              "src": "243:2:13"
             },
             "returnParameters": {
-              "id": 2635,
+              "id": 3012,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2634,
+                  "id": 3011,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2636,
-                  "src": "293:13:10",
+                  "scope": 3013,
+                  "src": "267:13:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -643,10 +447,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2633,
+                    "id": 3010,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "293:6:10",
+                    "src": "267:6:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -656,10 +460,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "292:15:10"
+              "src": "266:15:13"
             },
-            "scope": 2642,
-            "src": "254:54:10",
+            "scope": 3019,
+            "src": "228:54:13",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
@@ -667,29 +471,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2641,
+            "id": 3018,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "decimals",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2637,
+              "id": 3014,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "331:2:10"
+              "src": "305:2:13"
             },
             "returnParameters": {
-              "id": 2640,
+              "id": 3017,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2639,
+                  "id": 3016,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2641,
-                  "src": "355:5:10",
+                  "scope": 3018,
+                  "src": "329:5:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -697,10 +501,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 2638,
+                    "id": 3015,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "355:5:10",
+                    "src": "329:5:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -710,60 +514,49 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "354:7:10"
+              "src": "328:7:13"
             },
-            "scope": 2642,
-            "src": "314:48:10",
+            "scope": 3019,
+            "src": "288:48:13",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 2643,
-        "src": "144:220:10"
+        "scope": 3020,
+        "src": "133:205:13"
       }
     ],
-    "src": "0:364:10"
+    "src": "0:338:13"
   },
   "legacyAST": {
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IToken.sol",
     "exportedSymbols": {
       "IToken": [
-        2642
+        3019
       ]
     },
-    "id": 2643,
+    "id": 3020,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2620,
+        "id": 3000,
         "literals": [
           "solidity",
           "0.5",
           ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:22:10"
-      },
-      {
-        "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IERC20MetaTx.sol",
-        "file": "./IERC20MetaTx.sol",
-        "id": 2621,
-        "nodeType": "ImportDirective",
-        "scope": 2643,
-        "sourceUnit": 2619,
-        "src": "24:28:10",
-        "symbolAliases": [],
-        "unitAlias": ""
+        "src": "0:22:13"
       },
       {
         "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Token/IERC20Base.sol",
         "file": "./IERC20Base.sol",
-        "id": 2622,
+        "id": 3001,
         "nodeType": "ImportDirective",
-        "scope": 2643,
-        "sourceUnit": 2544,
-        "src": "53:26:10",
+        "scope": 3020,
+        "sourceUnit": 2999,
+        "src": "24:26:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -773,53 +566,33 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2623,
-              "name": "IERC20MetaTx",
-              "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2618,
-              "src": "163:12:10",
-              "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC20MetaTx_$2618",
-                "typeString": "contract IERC20MetaTx"
-              }
-            },
-            "id": 2624,
-            "nodeType": "InheritanceSpecifier",
-            "src": "163:12:10"
-          },
-          {
-            "arguments": null,
-            "baseName": {
-              "contractScope": null,
-              "id": 2625,
+              "id": 3002,
               "name": "IERC20Base",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2543,
-              "src": "177:10:10",
+              "referencedDeclaration": 2998,
+              "src": "152:10:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC20Base_$2543",
+                "typeIdentifier": "t_contract$_IERC20Base_$2998",
                 "typeString": "contract IERC20Base"
               }
             },
-            "id": 2626,
+            "id": 3003,
             "nodeType": "InheritanceSpecifier",
-            "src": "177:10:10"
+            "src": "152:10:13"
           }
         ],
         "contractDependencies": [
-          2495,
-          2543,
-          2618
+          2950,
+          2998
         ],
         "contractKind": "contract",
-        "documentation": "@title IToken interface\n@dev ",
+        "documentation": "@title Token Interface\n@dev Implementation of the Token Interface",
         "fullyImplemented": false,
-        "id": 2642,
+        "id": 3019,
         "linearizedBaseContracts": [
-          2642,
-          2543,
-          2495,
-          2618
+          3019,
+          2998,
+          2950
         ],
         "name": "IToken",
         "nodeType": "ContractDefinition",
@@ -827,29 +600,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2631,
+            "id": 3008,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "name",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2627,
+              "id": 3004,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "209:2:10"
+              "src": "183:2:13"
             },
             "returnParameters": {
-              "id": 2630,
+              "id": 3007,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2629,
+                  "id": 3006,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2631,
-                  "src": "233:13:10",
+                  "scope": 3008,
+                  "src": "207:13:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -857,10 +630,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2628,
+                    "id": 3005,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "233:6:10",
+                    "src": "207:6:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -870,10 +643,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "232:15:10"
+              "src": "206:15:13"
             },
-            "scope": 2642,
-            "src": "196:52:10",
+            "scope": 3019,
+            "src": "170:52:13",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
@@ -881,29 +654,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2636,
+            "id": 3013,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "symbol",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2632,
+              "id": 3009,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "269:2:10"
+              "src": "243:2:13"
             },
             "returnParameters": {
-              "id": 2635,
+              "id": 3012,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2634,
+                  "id": 3011,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2636,
-                  "src": "293:13:10",
+                  "scope": 3013,
+                  "src": "267:13:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -911,10 +684,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2633,
+                    "id": 3010,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "293:6:10",
+                    "src": "267:6:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -924,10 +697,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "292:15:10"
+              "src": "266:15:13"
             },
-            "scope": 2642,
-            "src": "254:54:10",
+            "scope": 3019,
+            "src": "228:54:13",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
@@ -935,29 +708,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2641,
+            "id": 3018,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "decimals",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2637,
+              "id": 3014,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "331:2:10"
+              "src": "305:2:13"
             },
             "returnParameters": {
-              "id": 2640,
+              "id": 3017,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2639,
+                  "id": 3016,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2641,
-                  "src": "355:5:10",
+                  "scope": 3018,
+                  "src": "329:5:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -965,10 +738,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 2638,
+                    "id": 3015,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "355:5:10",
+                    "src": "329:5:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -978,31 +751,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "354:7:10"
+              "src": "328:7:13"
             },
-            "scope": 2642,
-            "src": "314:48:10",
+            "scope": 3019,
+            "src": "288:48:13",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 2643,
-        "src": "144:220:10"
+        "scope": 3020,
+        "src": "133:205:13"
       }
     ],
-    "src": "0:364:10"
+    "src": "0:338:13"
   },
   "compiler": {
     "name": "solc",
     "version": "0.5.1+commit.c8a2cb62.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.5",
-  "updatedAt": "2019-03-28T08:21:47.414Z",
+  "schemaVersion": "3.0.6",
+  "updatedAt": "2019-04-10T07:29:43.554Z",
   "devdoc": {
+    "details": "Implementation of the Token Interface",
     "methods": {},
-    "title": "IToken interface"
+    "title": "Token Interface"
   },
   "userdoc": {
     "methods": {}

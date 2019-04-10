@@ -31,22 +31,29 @@ paths:
                 example:
                   health: true
                   date: "2018-02-19T15:36:46.758Z"
-  /metaTxRelay/{tokenAddress}:
+  /metaTxRelay/{gasToken}:
     get:
       parameters:
         - in: path
-          name: tokenAddress # Note the name is the same as in the path
+          name: gasToken # Note the name is the same as in the path
           required: true
           schema:
             type: string
-          example: "0xE17A43439B750F742c7e2D675D272EE15F8BE638"
-          description: The token address
+          example: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+          description: The gasToken address
         - in: query
           name: signer
           required: true
+          example: "0xd2330a9f6dDe4715F540D1669bf75E89a1b4FbBc"
           schema:
             type: string
-          description: transaction signer
+          description: address of EOA signer
+        - in: query
+          name: salt
+          required: true
+          schema:
+            type: string
+          description: uint256 randam salt of your contract account
       description: "test"
       tags:
         - Status
@@ -59,26 +66,24 @@ paths:
                 example:
                   result: true
                   token:
-                    address: "0x45E9932fD308346CB9157F8bF5937437Bf39BB4C"
+                    address: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
                   signer:
                     address: "0xd2330a9f6dDe4715F540D1669bf75E89a1b4FbBc"
+                    wallet: "0x82b98AC337A3b2da0450c6BDac5E27f7E6D46960"
                     nextNonce: "1"
-                    latestBalance: "118198599972998000000000000"
                   relayer:
                     address: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
-                    tokenReceiver: "0xCC8690540faE802A251945556817D49a96990f44"
                     gasPrice: "4000000000"
                     gasLimit: "200000"
-                    tokenPrice: "100000000000000000"
-
     post:
       parameters:
         - in: path
-          name: tokenAddress # Note the name is the same as in the path
+          name: gasToken # Note the name is the same as in the path
           required: true
           schema:
             type: string
-          description: The token address
+          example: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+          description: The gasToken address
       description: "test"
       tags:
         - Status
@@ -90,43 +95,46 @@ paths:
             schema:
               type: object
               properties:
-                from:
+                signer:
                   type: string
                   required: true
                   example: "0xd2330a9f6dDe4715F540D1669bf75E89a1b4FbBc"
+                salt:
+                  type: string
+                  required: true
+                  example: "34040555"
                 to:
                   type: string
                   required: true
-                  example: "0x7D0344e0ee6bC3901F4b11b9d9b8D001b49872A1"
-
-                amount:
+                  example: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+                value:
                   type: string
                   required: true
-                  example: "20000000000000000000"
-                  description: "using BigNumber"
-                inputs:
-                  type: array
-                  example: ["4000000000", "200000", "100000000000000000", "1"]
-                  items:
-                    type: string
-                    required: true
-                    description: "using BigNumber [0 => _gasPrice, 1 => _gasLimit, 2 => _gasTokenPerWei, 3 => _nonce]"
-                relayer:
+                  example: "0"
+                  description: "using BigNumber basically use zero to call"
+                data:
                   type: string
-                  example: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
+                  example: "0xa9059cbb0000000000000000000000007d0344e0ee6bc3901f4b11b9d9b8d001b49872a10000000000000000000000000000000000000000000000022b1c8c1227a00000"
                   required: true
-                v:
+                  description: "data payload to call other contract"
+                nonce:
                   type: string
+                  example: "1"
                   required: true
-                  example: "28"
-                r:
+                  description: "signer's nonce"
+                gasPrice:
                   type: string
+                  example: "2000000000"
                   required: true
-                  example: "0x9b94e91c90cb884eacb312140ec2e70a015a293abd49631ac5ffdae017cb0b4e"
-                s:
+                  description: "gasPrice"
+                safeTxGas:
                   type: string
                   required: true
-                  example: "0x36e66e4b33d54c16d583311eeaa6c1894302dba23046e6de91ce62e0c9ce3f60"
+                  example: "1500000"
+                sig:
+                  type: string
+                  required: true
+                  example: "0xe41a6f641594042fc98ecfb0becec85c3aa57f57307bfeb2cfd55614ce0989b811db8cdd47b24fd227405bbe4928141c98d92e58f0d753f92c1680bb5d9124e21c"
 
       responses:
         200:

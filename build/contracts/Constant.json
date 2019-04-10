@@ -4,7 +4,21 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "SWINGBY_TX_TYPEHASH",
+      "name": "DOMAIN_SEPARATOR_THASH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "SWINGBY_TX_THASH",
       "outputs": [
         {
           "name": "",
@@ -16,52 +30,53 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x6080604052348015600f57600080fd5b5060b98061001e6000396000f3fe6080604052600436106039576000357c010000000000000000000000000000000000000000000000000000000090048063881967f914603e575b600080fd5b348015604957600080fd5b5060506066565b6040518082815260200191505060405180910390f35b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a723058204811696709326a2ac0dd2f2de5a4f256ab4b826e91476357fb1bed04cb7fbc2c0029",
-  "deployedBytecode": "0x6080604052600436106039576000357c010000000000000000000000000000000000000000000000000000000090048063881967f914603e575b600080fd5b348015604957600080fd5b5060506066565b6040518082815260200191505060405180910390f35b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a723058204811696709326a2ac0dd2f2de5a4f256ab4b826e91476357fb1bed04cb7fbc2c0029",
-  "sourceMap": "62:275:12:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;62:275:12;;;;;;;",
-  "deployedSourceMap": "62:275:12:-;;;;;;;;;;;;;;;;;;;;;;221:112;;8:9:-1;5:2;;;30:1;27;20:12;5:2;221:112:12;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;267:66;221:112;;;:::o",
-  "source": "pragma solidity 0.5.1;\n\n/**\n * @title Constant \n * @dev \n */\n\ncontract Constant { \n    // Swingby Tx hash type\n    //keccak256(\n    //    \"SwingbyTx(address _from,address _to,uint256 _amount,uint256 _nonce)\"\n    //);\n    bytes32 public constant SWINGBY_TX_TYPEHASH = 0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b;\n\n}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.1+commit.c8a2cb62\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"DOMAIN_SEPARATOR_THASH\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"SWINGBY_TX_THASH\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Implementation of the Constant\",\"methods\":{},\"title\":\"Constant\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol\":\"Constant\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol\":{\"keccak256\":\"0x5f74c331aa550d54af3bcf0dbf5b8447780bae803a4214ab357653b4ef499438\",\"urls\":[\"bzzr://4517b3d60dc536480d934feded5f8e137896885a1e3b9217eb1a3145cc8258d6\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610112806100206000396000f3fe6080604052600436106043576000357c010000000000000000000000000000000000000000000000000000000090048063a17ca996146048578063ee93fb86146070575b600080fd5b348015605357600080fd5b50605a6098565b6040518082815260200191505060405180910390f35b348015607b57600080fd5b50608260bf565b6040518082815260200191505060405180910390f35b7f035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d474960010281565b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a7230582028fe2e1f774a72ea373ff4132e6469cb0fb5628aab042b5a6279de97a7be08330029",
+  "deployedBytecode": "0x6080604052600436106043576000357c010000000000000000000000000000000000000000000000000000000090048063a17ca996146048578063ee93fb86146070575b600080fd5b348015605357600080fd5b50605a6098565b6040518082815260200191505060405180910390f35b348015607b57600080fd5b50608260bf565b6040518082815260200191505060405180910390f35b7f035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d474960010281565b7f199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b6001028156fea165627a7a7230582028fe2e1f774a72ea373ff4132e6469cb0fb5628aab042b5a6279de97a7be08330029",
+  "sourceMap": "91:533:16:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;91:533:16;;;;;;;",
+  "deployedSourceMap": "91:533:16:-;;;;;;;;;;;;;;;;;;;;;;;;;;;443:115;;8:9:-1;5:2;;;30:1;27;20:12;5:2;443:115:16;;;:::i;:::-;;;;;;;;;;;;;;;;;;;249:109;;8:9:-1;5:2;;;30:1;27;20:12;5:2;249:109:16;;;:::i;:::-;;;;;;;;;;;;;;;;;;;443:115;492:66;443:115;;;:::o;249:109::-;292:66;249:109;;;:::o",
+  "source": "pragma solidity 0.5.1;\n\n/**\n * @title Constant\n * @dev Implementation of the Constant\n */\n\ncontract Constant {\n    // Swingby Tx hash type\n    //keccak256(\n    //    \"SwingbyTx(address _from,address _to,uint256 _amount,uint256 _nonce)\"\n    //);\n    bytes32 public constant SWINGBY_TX_THASH = 0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b;\n\n    //keccak256(\n    //    \"EIP712Domain(address verifyingContract)\"\n    //);\n    bytes32 public constant DOMAIN_SEPARATOR_THASH = 0x035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d4749;\n\n    bytes4 constant internal ERC1271_MAGICVALUE = 0x20c13b0b;\n}",
   "sourcePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
   "ast": {
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
     "exportedSymbols": {
       "Constant": [
-        2763
+        3148
       ]
     },
-    "id": 2764,
+    "id": 3149,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2759,
+        "id": 3138,
         "literals": [
           "solidity",
           "0.5",
           ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:22:12"
+        "src": "0:22:16"
       },
       {
         "baseContracts": [],
         "contractDependencies": [],
         "contractKind": "contract",
-        "documentation": "@title Constant \n@dev ",
+        "documentation": "@title Constant\n@dev Implementation of the Constant",
         "fullyImplemented": true,
-        "id": 2763,
+        "id": 3148,
         "linearizedBaseContracts": [
-          2763
+          3148
         ],
         "name": "Constant",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2762,
-            "name": "SWINGBY_TX_TYPEHASH",
+            "id": 3141,
+            "name": "SWINGBY_TX_THASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2763,
-            "src": "221:112:12",
+            "scope": 3148,
+            "src": "249:109:16",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -69,10 +84,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2760,
+              "id": 3139,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "221:7:12",
+              "src": "249:7:16",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -81,14 +96,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831393961613134363532333330343736306138383039326565316464333338613638663130313835333735383237663165383338616235653962643136323262",
-              "id": 2761,
+              "id": 3140,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "267:66:12",
+              "src": "292:66:16",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_11581028739572226146039439874564362951019942869714839850274750470318497817131_by_1",
@@ -97,54 +112,140 @@
               "value": "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
             },
             "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 3144,
+            "name": "DOMAIN_SEPARATOR_THASH",
+            "nodeType": "VariableDeclaration",
+            "scope": 3148,
+            "src": "443:115:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes32",
+              "typeString": "bytes32"
+            },
+            "typeName": {
+              "id": 3142,
+              "name": "bytes32",
+              "nodeType": "ElementaryTypeName",
+              "src": "443:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes32",
+                "typeString": "bytes32"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "307830333561666638336438363933376433356233326530346630646463366666343639323930656566326631623639326438613831356338393430346434373439",
+              "id": 3143,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "492:66:16",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1517718281442037948617199096126532355110765202990829672390711201829802035017_by_1",
+                "typeString": "int_const 1517...(68 digits omitted)...5017"
+              },
+              "value": "0x035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d4749"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 3147,
+            "name": "ERC1271_MAGICVALUE",
+            "nodeType": "VariableDeclaration",
+            "scope": 3148,
+            "src": "565:56:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes4",
+              "typeString": "bytes4"
+            },
+            "typeName": {
+              "id": 3145,
+              "name": "bytes4",
+              "nodeType": "ElementaryTypeName",
+              "src": "565:6:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes4",
+                "typeString": "bytes4"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "30783230633133623062",
+              "id": 3146,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "611:10:16",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_549534475_by_1",
+                "typeString": "int_const 549534475"
+              },
+              "value": "0x20c13b0b"
+            },
+            "visibility": "internal"
           }
         ],
-        "scope": 2764,
-        "src": "62:275:12"
+        "scope": 3149,
+        "src": "91:533:16"
       }
     ],
-    "src": "0:337:12"
+    "src": "0:624:16"
   },
   "legacyAST": {
     "absolutePath": "/Users/sengayusaku/repo/btc2eth1/contracts/Utils/Constant.sol",
     "exportedSymbols": {
       "Constant": [
-        2763
+        3148
       ]
     },
-    "id": 2764,
+    "id": 3149,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2759,
+        "id": 3138,
         "literals": [
           "solidity",
           "0.5",
           ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:22:12"
+        "src": "0:22:16"
       },
       {
         "baseContracts": [],
         "contractDependencies": [],
         "contractKind": "contract",
-        "documentation": "@title Constant \n@dev ",
+        "documentation": "@title Constant\n@dev Implementation of the Constant",
         "fullyImplemented": true,
-        "id": 2763,
+        "id": 3148,
         "linearizedBaseContracts": [
-          2763
+          3148
         ],
         "name": "Constant",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2762,
-            "name": "SWINGBY_TX_TYPEHASH",
+            "id": 3141,
+            "name": "SWINGBY_TX_THASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2763,
-            "src": "221:112:12",
+            "scope": 3148,
+            "src": "249:109:16",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -152,10 +253,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2760,
+              "id": 3139,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "221:7:12",
+              "src": "249:7:16",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -164,14 +265,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831393961613134363532333330343736306138383039326565316464333338613638663130313835333735383237663165383338616235653962643136323262",
-              "id": 2761,
+              "id": 3140,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "267:66:12",
+              "src": "292:66:16",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_11581028739572226146039439874564362951019942869714839850274750470318497817131_by_1",
@@ -180,24 +281,111 @@
               "value": "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
             },
             "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 3144,
+            "name": "DOMAIN_SEPARATOR_THASH",
+            "nodeType": "VariableDeclaration",
+            "scope": 3148,
+            "src": "443:115:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes32",
+              "typeString": "bytes32"
+            },
+            "typeName": {
+              "id": 3142,
+              "name": "bytes32",
+              "nodeType": "ElementaryTypeName",
+              "src": "443:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes32",
+                "typeString": "bytes32"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "307830333561666638336438363933376433356233326530346630646463366666343639323930656566326631623639326438613831356338393430346434373439",
+              "id": 3143,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "492:66:16",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1517718281442037948617199096126532355110765202990829672390711201829802035017_by_1",
+                "typeString": "int_const 1517...(68 digits omitted)...5017"
+              },
+              "value": "0x035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d4749"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 3147,
+            "name": "ERC1271_MAGICVALUE",
+            "nodeType": "VariableDeclaration",
+            "scope": 3148,
+            "src": "565:56:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes4",
+              "typeString": "bytes4"
+            },
+            "typeName": {
+              "id": 3145,
+              "name": "bytes4",
+              "nodeType": "ElementaryTypeName",
+              "src": "565:6:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes4",
+                "typeString": "bytes4"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "30783230633133623062",
+              "id": 3146,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "611:10:16",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_549534475_by_1",
+                "typeString": "int_const 549534475"
+              },
+              "value": "0x20c13b0b"
+            },
+            "visibility": "internal"
           }
         ],
-        "scope": 2764,
-        "src": "62:275:12"
+        "scope": 3149,
+        "src": "91:533:16"
       }
     ],
-    "src": "0:337:12"
+    "src": "0:624:16"
   },
   "compiler": {
     "name": "solc",
     "version": "0.5.1+commit.c8a2cb62.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.5",
-  "updatedAt": "2019-03-23T08:45:58.532Z",
+  "schemaVersion": "3.0.6",
+  "updatedAt": "2019-04-10T06:17:21.730Z",
   "devdoc": {
+    "details": "Implementation of the Constant",
     "methods": {},
-    "title": "Constant "
+    "title": "Constant"
   },
   "userdoc": {
     "methods": {}
