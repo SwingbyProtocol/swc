@@ -6,35 +6,13 @@ const ethUtil = require('ethereumjs-util')
 const BN = ethUtil.BN
 const config = require('config')
 const tokenData = require('../build/contracts/Token.json')
-const accountData = require('../build/contracts/Account.json')
 const callerData = require('../build/contracts/AccountCaller.json')
-
-const ethConf = config.get("eth")
-const relayerConf = config.get("relayer")
 const getWeb3 = require('../resolvers').api.getWeb3
+const account = require('../resolvers').account()
 
-//const SWINGBY_TX_TYPEHASH = "0x199aa146523304760a88092ee1dd338a68f10185375827f1e838ab5e9bd1622b"
-
-if (process.env.NODE_ENV == "testnet") {
-    console.log(`network = web3 : ropsten, btc : testnet3`)
-} else {
-    console.log(`network = web3 : localhost, btc : localhost`)
-}
-
-if (!isHex(process.env.KEY)) {
-    throw boom.boomify(new Error('privkey is not provided'))
-}
-const privkey = new Buffer.from(process.env.KEY.slice(2), 'hex')
-const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey).toString('hex'))
-ethConf.tokens.forEach(t => {
-    console.log(`supported Tokens = ${t.name} address: ${t.address}`)
-});
 let caller
 let txs = {}
 let tokens = {}
-let estimateGas = 0
-
-console.log(`relayer == ${sender} caller == ${ethConf.caller.address}`)
 
 module.exports.getMetaTx = async (req, reply) => {
     try {
@@ -52,11 +30,11 @@ module.exports.getMetaTx = async (req, reply) => {
         }
 
         if (!caller) {
-            caller = new web3.eth.Contract(callerData.abi, ethConf.caller.address)
+            caller = new web3.eth.Contract(callerData.abi, config.eth.caller.address)
         }
 
         const batch = []
-        batch.push(caller.methods.getEstimateGasPrice(params.gasToken, sender).call())
+        batch.push(caller.methods.getEstimateGasPrice(params.gasToken, account.address).call())
         batch.push(caller.methods.getNonce(query.signer).call())
         batch.push(caller.methods.getAccountAddress(query.signer, query.salt).call())
 
@@ -73,9 +51,9 @@ module.exports.getMetaTx = async (req, reply) => {
                 nextNonce: new BN(calls[1].toString()).toString()
             },
             relayer: {
-                address: sender,
+                address: account.address,
                 gasPrice: new BN(calls[0].toString()).toString(),
-                safeTxGas: relayerConf.safeTxGas
+                safeTxGas: config.relayer.safeTxGas
             }
         }
 
@@ -100,7 +78,7 @@ module.exports.postMetaTx = async (req, reply) => {
         }
 
         if (!caller) {
-            caller = new web3.eth.Contract(callerData.abi, ethConf.caller.address)
+            caller = new web3.eth.Contract(callerData.abi, config.eth.caller.address)
         }
 
         const func = caller.methods.callWithDeploy(
@@ -116,12 +94,12 @@ module.exports.postMetaTx = async (req, reply) => {
             body.sig
         )
 
-        const gasPrice = '0x' + new BN(relayerConf.gasPrice).toString('hex')
+        const gasPrice = '0x' + new BN(config.relayer.gasPrice).toString('hex')
         const gasLimit = '0x' + new BN("80000").add(new BN(body.safeTxGas)).toString('hex')
 
         const batch = []
         batch.push(caller.methods.getNonce(body.signer).call())
-        batch.push(web3.eth.getTransactionCount(sender))
+        batch.push(web3.eth.getTransactionCount(account.address))
 
         const calls = await Promise.all(batch)
 
@@ -134,14 +112,14 @@ module.exports.postMetaTx = async (req, reply) => {
             nonce: '0x' + calls[1].toString(16),
             gasPrice: gasPrice,
             gasLimit: gasLimit,
-            from: sender,
+            from: account.address,
             to: caller.address,
             data: func.encodeABI(),
             chainId: process.env.NODE_ENV === 'mainnet' ? 0 : 5
         };
 
-        var tx = new ethTx(txParams);
-        tx.sign(privkey);
+        const tx = new ethTx(txParams);
+        tx.sign(account.privkey);
 
         const serializedTx = '0x' + tx.serialize().toString('hex')
 
@@ -200,7 +178,7 @@ function validatePost(params, body) {
             reject(new Error("token validation error"))
         if (!sanitize(body))
             reject(new Error("sanitize error"))
-        if (!isValidRelayer(body.relayer, privkey))
+        if (!isValidRelayer(body.relayer, account.privkey))
             reject(new Error("sender or tokenReceiver is not relayer"))
         if (!isValidMetaTx(body))
             reject(new Error("valid tx error"))
@@ -211,21 +189,21 @@ function validatePost(params, body) {
 
 
 function isValidConfig() {
-    if (!relayerConf.safeTxGas)
+    if (!config.relayer.safeTxGas)
         return false
-    if (!relayerConf.gasPrice)
+    if (!config.relayer.gasPrice)
         return false
-    if (!ethConf.caller.address)
+    if (!config.eth.caller.address)
         return false
-    if (!ethConf.tokens)
+    if (!config.eth.tokens)
         return false
-    if (!isStringInteger(relayerConf.safeTxGas))
+    if (!isStringInteger(config.relayer.safeTxGas))
         return false
-    if (!isStringInteger(relayerConf.gasPrice))
+    if (!isStringInteger(config.relayer.gasPrice))
         return false
-    if (!isAddress(ethConf.caller.address))
+    if (!isAddress(config.eth.caller.address))
         return false
-    if (!ethConf.tokens instanceof Array)
+    if (!config.eth.tokens instanceof Array)
         return false
     return true
 }
@@ -236,7 +214,7 @@ function isValidToken(params) {
     if (!isAddress(params.gasToken))
         return false;
     const buf = Buffer.from(params.gasToken.slice(2), 'hex')
-    if (ethConf.tokens.filter((t) => {
+    if (config.eth.tokens.filter((t) => {
             return (Buffer.from(t.address.slice(2), 'hex').toString('hex') === buf.toString('hex'))
         }).length === 0) {
         return false
@@ -267,9 +245,9 @@ function isValidRelayer(relayer, privkey) {
 
 function isValidMetaTx(body) {
 
-    if (relayerConf.gasPrice !== body.gasPrice)
+    if (config.relayer.gasPrice !== body.gasPrice)
         return false
-    if (relayerConf.safeTxGas !== body.safeTxGas)
+    if (config.relayer.safeTxGas !== body.safeTxGas)
         return false
     const from = Buffer.from(body.from.slice(2), 'hex')
     const to = Buffer.from(body.to.slice(2), "hex")

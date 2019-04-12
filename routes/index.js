@@ -1,7 +1,6 @@
 'use strict';
 
 const relayer = require('../controllers/relayerCtrl')
-const keep = require('../controllers/keepCtrl')
 
 
 const routes = [{
