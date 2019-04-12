@@ -1,6 +1,6 @@
 'use strict';
 
-const ihc = require('ipfs-http-client')
+const ipfsClient = require('ipfs-http-client')
 const web3js = require('web3')
 const config = require('config');
 
@@ -46,13 +46,11 @@ module.exports.initIPFS = () => {
         return false
     }
     const ipfs = ipfsConf.nodes[Math.floor(Math.random() * ipfsConf.nodes.length)]
-    var ipfsObj = ihc({
-        host: ipfs.host,
-        port: ipfs.port,
-        protocol: 'http'
+    var ipfsObj = ipfsClient(ipfs.uri, undefined, {
+        timeout: 4
     })
     instance.ipfs = ipfsObj
-    console.log(`ipfs initialized ${ipfs.host} ${ipfs.port}`)
+    console.log(`ipfs initialized ${ipfs.uri}`)
 }
 
 module.exports.getIPFS = () => {

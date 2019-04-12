@@ -5,7 +5,7 @@ const config = require('config')
 const ethConf = config.get("eth")
 
 if (process.env.NODE_ENV == "testnet") {
-    console.log(`network = web3 : ropsten, btc : testnet3`)
+    console.log(`network = web3 : goerli, btc : testnet3`)
 } else {
     console.log(`network = web3 : localhost, btc : localhost`)
 }

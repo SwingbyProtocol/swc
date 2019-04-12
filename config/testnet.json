@@ -1,8 +1,7 @@
 {
     "ipfs": {
         "nodes": [{
-            "host": "104.199.184.210",
-            "port": "5001"
+            "uri": "/ip4/35.221.164.62/tcp/5001"
         }]
     },
     "eth": {
@@ -17,7 +16,7 @@
             "address": "0x49E3bb53fe7F43117F8136A584Dbd91979047aDF"
         },
         "btc2eth1": {
-            "address": "0x3cac8DBEd09BcDD2a070Aaab9Bd720cBA7b311F2"
+            "address": "0x9E58990b2c344825d3a6Ac0539a0B43B5dcC878f"
         },
         "tokens": [{
             "name": "tUSDC",
