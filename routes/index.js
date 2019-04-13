@@ -1,17 +1,21 @@
 'use strict';
 
-const relayer = require('../controllers/relayerCtrl')
-
+const relayerCtrl = require('../controllers/relayerCtrl')
+const wshCtrl = require('../controllers/wshCtrl')
 
 const routes = [{
+        method: 'GET',
+        url: '/wshLists',
+        handler: wshCtrl.getWshLists
+    }, {
         method: 'POST',
         url: '/metaTxRelay/:gasToken',
-        handler: relayer.postMetaTx
+        handler: relayerCtrl.postMetaTx
     },
     {
         method: 'GET',
         url: '/metaTxRelay/:gasToken',
-        handler: relayer.getMetaTx
+        handler: relayerCtrl.getMetaTx
     }
 ]
 

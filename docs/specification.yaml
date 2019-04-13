@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  description: "Swingby Witness Component(SWC) specification"
   version: "1.0.0"
-  title: "swc specification"
+  title: "SWC Basic API specification"
+  description: "Swingby Witness Component(SWC) specification"
   contact:
     email: ""
 servers:
@@ -11,7 +11,7 @@ servers:
     description: Dev
 
 paths:
-  /status:
+  /wshLists:
     get:
       description: Status route, so we can check if server is alive
       tags:
@@ -21,16 +21,20 @@ paths:
           description: "Server is alive"
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  health:
-                    type: boolean
-                  date:
-                    type: string
-                example:
-                  health: true
-                  date: "2018-02-19T15:36:46.758Z"
+              example:
+                result: true
+                wshLists:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      wsh:
+                        type: string
+                        sample: "0x990f306e74ca7a840184234fc4aef34c006e43cae3a9ad234f653aaa9dae0636"
+                      own:
+                        type: string
+                        sample: "0x7D0344e0ee6bC3901F4b11b9d9b8D001b49872A1"
+
   /metaTxRelay/{gasToken}:
     get:
       parameters:

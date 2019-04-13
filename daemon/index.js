@@ -1,6 +1,5 @@
 'use strict';
 
-const boom = require('boom')
 const ethTx = require('ethereumjs-tx')
 const ethUtil = require('ethereumjs-util')
 const bs58 = require('bs58')
@@ -30,8 +29,8 @@ setTimeout(async () => {
 
         setTimeout(async () => {
             await fetchKeep(web3, ipfs)
-            await updateKeep(web3, ipfs)
             await checkWshes(web3, ipfs)
+            await updateKeep(web3, ipfs)
         }, 10000)
 
     } catch (err) {
@@ -124,20 +123,20 @@ const store = async (ipfs) => {
     return '0x' + bytes32.toString('hex')
 }
 
-const attachWitnessToData = async (ipfs, sender, ipfsHash) => {
+const attachWitnessToData = async (ipfs, own, ipf) => {
     try {
-        const ipfsPath = toIPFSHash(ipfsHash)
+        const ipfsPath = toIPFSHash(ipf)
         const parsed = await ipfsCall(ipfs, ipfsPath)
         if (!data.relayer) {
             console.log('error data is not exist')
             return false
         }
-        if (data.witnesses[sender]) {
+        if (data.witnesses[own]) {
             console.log('already attached')
             return false
         }
-        data.witnesses[sender] = parsed.relayer
-        console.log('Add witness to keep...', sender)
+        data.witnesses[own] = parsed.relayer
+        console.log('Add witness to keep...', own)
     } catch (err) {
         console.log(err)
     }
@@ -182,7 +181,7 @@ function eventHandler(ipfs, btc2eth1Instance) {
             updateDataByKeepEvent(ipfs, event)
         })
         .on('changed', (event) => {
-            console.log(event.returnValues.ipfsHash, 'change'); /// remove event from local database
+            console.log(event.returnValues.ipf, 'change'); /// remove event from local database
         })
         .on('error', (err) => {
             console.log(err)
@@ -190,7 +189,7 @@ function eventHandler(ipfs, btc2eth1Instance) {
 }
 
 const updateDataByKeepEvent = (ipfs, event) => {
-    attachWitnessToData(ipfs, event.returnValues.sender, event.returnValues.ipfsHash)
+    attachWitnessToData(ipfs, event.returnValues.own, event.returnValues.ipf)
 }
 
 
