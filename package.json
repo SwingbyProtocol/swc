@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/nodemon/bin/nodemon.js ./index.js",
+    "enclave": "./node_modules/nodemon/bin/nodemon.js ./enclave/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "syrohei",

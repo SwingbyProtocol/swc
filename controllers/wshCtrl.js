@@ -21,11 +21,32 @@ module.exports.getWshLists = async (req, reply) => {
         const web3 = getWeb3()
         console.log(`current provider: ${web3.currentProvider.host}`)
 
-        const params = req.params
-        const query = req.query
-        const body = req.body
+        if (!btc2eth1Instance) {
+            btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
+            console.log('init btc2eth1', btc2eth1Instance.address)
+            updateWshList()
+        }
+        console.log('updated eventLists count:', eventLists.length, 'wshLists', wshLists.length)
 
-        //await validateGet(params, query, body)
+        return {
+            result: true,
+            wshLists: wshLists.length > 14 ? wshLists.slice(wshLists.length - 14) : wshLists
+        }
+    } catch (err) {
+        throw boom.boomify(err)
+    }
+}
+
+module.exports.getWshSingle = async (req, reply) => {
+    try {
+        const web3 = getWeb3()
+        console.log(`current provider: ${web3.currentProvider.host}`)
+
+        const params = req.params
+        if (!params.wsh)
+            throw boom.boomify(new Error("wsh is not provided"))
+        if (!isHexString64With0x(params.wsh))
+            throw boom.boomify(new Error("wsh is not validated"))
 
         if (!btc2eth1Instance) {
             btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
@@ -33,35 +54,68 @@ module.exports.getWshLists = async (req, reply) => {
             updateWshList()
         }
 
+        const status = await btc2eth1Instance.methods.getCount(params.wsh).call()
+
+        let msg = "NotUsed"
+        if (status.toString() == "1")
+            msg = "UsedByLender"
+        if (status.toString() == "2")
+            msg = "UsedByBoth"
+
         return {
             result: true,
-            wshLists: wshLists
+            status: msg,
+            log: status.toString()
         }
-
-
     } catch (err) {
         throw boom.boomify(err)
     }
 }
 
 
+function isHexString64With0x(str) {
+    if (!str instanceof String) {
+        return false
+    }
+    if (str.length !== 66) {
+        return false
+    }
+    const regexp = /^[0-9a-fA-F]+$/;
+    if (!regexp.test(str.slice(2))) {
+        return false
+    }
+    return true
+}
+
 const updateWshList = () => {
+    if (!btc2eth1Instance) {
+        btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
+        console.log('init btc2eth1', btc2eth1Instance.address)
+    }
     btc2eth1Instance.getPastEvents('AddWshEvent', {
-            filter: {}, // Using an array means OR: e.g. 20 or 23
+            filter: {},
             fromBlock: 0,
             toBlock: 'latest'
         })
         .then((events) => {
             eventLists = events
-            wshLists = events.slice(events.length - 40).map((event) => {
+            wshLists = eventLists.map((event) => {
                 return {
                     wsh: event.returnValues.wsh,
                     own: event.returnValues.own
                 }
             })
-            console.log('updated eventLists count:', eventLists.length, 'wshLists', wshLists.length)
         });
-    setTimeout(() => {
-        updateWshList()
-    }, 50000)
+
+    btc2eth1Instance.events.AddWshEvent()
+        .on('data', (event) => {
+            wshLists.push({
+                wsh: event.returnValues.wsh,
+                own: event.returnValues.own
+            })
+            eventLists.push({
+                wsh: event.returnValues.wsh,
+                own: event.returnValues.own
+            })
+        })
 }

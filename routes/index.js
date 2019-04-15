@@ -8,6 +8,10 @@ const routes = [{
         url: '/wshLists',
         handler: wshCtrl.getWshLists
     }, {
+        method: 'GET',
+        url: '/wshLists/:wsh',
+        handler: wshCtrl.getWshSingle
+    }, {
         method: 'POST',
         url: '/metaTxRelay/:gasToken',
         handler: relayerCtrl.postMetaTx
