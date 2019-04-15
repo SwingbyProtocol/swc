@@ -53,13 +53,13 @@ const updateWshList = () => {
         })
         .then((events) => {
             eventLists = events
-            wshLists = events.map((event) => {
+            wshLists = events.slice(events.length - 40).map((event) => {
                 return {
                     wsh: event.returnValues.wsh,
                     own: event.returnValues.own
                 }
             })
-            console.log('updated wshLists count:', wshLists.length)
+            console.log('updated eventLists count:', eventLists.length, 'wshLists', wshLists.length)
         });
     setTimeout(() => {
         updateWshList()

@@ -10,7 +10,7 @@ const initWeb3 = resolvers.api.initWeb3
 initIPFS()
 initWeb3()
 
-const daemon = task.fork('./daemon');
+//const daemon = task.fork('./daemon');
 
 fastify.register(
   routes, {

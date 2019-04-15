@@ -18,22 +18,29 @@ paths:
         - Status
       responses:
         200:
-          description: "Server is alive"
+          description: GET
           content:
             application/json:
-              example:
-                result: true
-                wshLists:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      wsh:
-                        type: string
-                        sample: "0x990f306e74ca7a840184234fc4aef34c006e43cae3a9ad234f653aaa9dae0636"
-                      own:
-                        type: string
-                        sample: "0x7D0344e0ee6bC3901F4b11b9d9b8D001b49872A1"
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    example: true
+                  wshLists:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        wsh:
+                          type: string
+                        own:
+                          type: string
+                    example:
+                      - wsh: "0xba59e076ba94b354d0050e1339e50723370afd8fcb9dfd274c026e3816f82a9b"
+                        own: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
+                      - wsh: "0xc1d3260b34dd0784e58da35164ad7340ff8ba9cc57ad6a1fa924fe212b5337d0"
+                        own: "0x7D0344e0ee6bC3901F4b11b9d9b8D001b49872A1"
 
   /metaTxRelay/{gasToken}:
     get:
