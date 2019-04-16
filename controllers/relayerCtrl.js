@@ -10,7 +10,7 @@ const callerData = require('../build/contracts/AccountCaller.json')
 const getWeb3 = require('../resolvers').api.getWeb3
 const account = require('../resolvers').account()
 
-let caller
+let accountCaller
 let txs = {}
 let tokens = {}
 
@@ -29,14 +29,14 @@ module.exports.getMetaTx = async (req, reply) => {
             tokens[params.gasToken] = new web3.eth.Contract(tokenData.abi, params.gasToken)
         }
 
-        if (!caller) {
-            caller = new web3.eth.Contract(callerData.abi, config.eth.caller.address)
+        if (!accountCaller) {
+            accountCaller = new web3.eth.Contract(callerData.abi, config.eth.accountCaller.address)
         }
 
         const batch = []
-        batch.push(caller.methods.getEstimateGasPrice(params.gasToken, account.address).call())
-        batch.push(caller.methods.getNonce(query.signer).call())
-        batch.push(caller.methods.getAccountAddress(query.signer, query.salt).call())
+        batch.push(accountCaller.methods.getEstimateGasPrice(params.gasToken, account.address).call())
+        batch.push(accountCaller.methods.getNonce(query.signer).call())
+        batch.push(accountCaller.methods.getAccountAddress(query.signer, query.salt).call())
 
         let calls = await Promise.all(batch)
 
@@ -54,6 +54,9 @@ module.exports.getMetaTx = async (req, reply) => {
                 address: account.address,
                 gasPrice: new BN(calls[0].toString()).toString(),
                 safeTxGas: config.relayer.safeTxGas
+            },
+            accountCaller: {
+                address: accountCaller.address
             }
         }
 
@@ -77,11 +80,11 @@ module.exports.postMetaTx = async (req, reply) => {
             tokens[params.gasToken] = new web3.eth.Contract(tokenData.abi, params.gasToken)
         }
 
-        if (!caller) {
-            caller = new web3.eth.Contract(callerData.abi, config.eth.caller.address)
+        if (!accountCaller) {
+            accountCaller = new web3.eth.Contract(callerData.abi, config.eth.accountCaller.address)
         }
 
-        const func = caller.methods.callWithDeploy(
+        const func = accountCaller.methods.callWithDeploy(
             body.signer,
             body.salt,
             body.to,
@@ -98,7 +101,7 @@ module.exports.postMetaTx = async (req, reply) => {
         const gasLimit = '0x' + new BN("80000").add(new BN(body.safeTxGas)).toString('hex')
 
         const batch = []
-        batch.push(caller.methods.getNonce(body.signer).call())
+        batch.push(accountCaller.methods.getNonce(body.signer).call())
         batch.push(web3.eth.getTransactionCount(account.address))
 
         const calls = await Promise.all(batch)
@@ -113,7 +116,7 @@ module.exports.postMetaTx = async (req, reply) => {
             gasPrice: gasPrice,
             gasLimit: gasLimit,
             from: account.address,
-            to: caller.address,
+            to: accountCaller.address,
             data: func.encodeABI(),
             chainId: process.env.NODE_ENV === 'mainnet' ? 0 : 5
         };
@@ -152,7 +155,7 @@ function handleSend(web3, serializedTx) {
                 reject(err)
             })
             .on('confirmation', function (confirmationNumber, receipt) {
-                if (confirmationNumber <= 12)
+                if (confirmationNumber <= 5)
                     console.log(confirmationNumber, receipt.transactionHash)
             })
     })
@@ -193,7 +196,7 @@ function isValidConfig() {
         return false
     if (!config.relayer.gasPrice)
         return false
-    if (!config.eth.caller.address)
+    if (!config.eth.accountCaller.address)
         return false
     if (!config.eth.tokens)
         return false
@@ -201,7 +204,7 @@ function isValidConfig() {
         return false
     if (!isStringInteger(config.relayer.gasPrice))
         return false
-    if (!isAddress(config.eth.caller.address))
+    if (!isAddress(config.eth.accountCaller.address))
         return false
     if (!config.eth.tokens instanceof Array)
         return false

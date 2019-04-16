@@ -12,11 +12,11 @@
             "host": "wss://goerli.infura.io/ws/v3/c2f0a8b07b5747b19200a97f41f1949b",
             "port": ""
         }],
-        "caller": {
-            "address": "0x49E3bb53fe7F43117F8136A584Dbd91979047aDF"
+        "accountCaller": {
+            "address": "0x8eca93ac295939E032694BdaBb42aDB97eF1A35b"
         },
         "btc2eth1": {
-            "address": "0xd10e1CEA41239b997A0B1E6beDAb55065Ab6BE08"
+            "address": "0x38DBc6D75d1Dfe25fD193428626EB1b7E0A4872c"
         },
         "tokens": [{
             "name": "tUSDC",

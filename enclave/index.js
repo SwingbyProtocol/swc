@@ -12,10 +12,10 @@ const ecies = require("eth-ecies");
 const sha256 = require('sha256')
 
 let btc2eth1Instance
-let txs
 let lastIPFSHash
-let data
 let nowNonce = 0
+let txs = {}
+let data = {}
 
 api.initWeb3()
 api.initIPFS()
@@ -107,9 +107,13 @@ const checkWshes = async (web3, ipfs) => {
 }
 
 const updateKeep = async (web3, ipfs) => {
-    const ipfsHash = await store(ipfs)
-    const func = btc2eth1Instance.methods.keep(ipfsHash)
-    await sendTx('keep', web3, func.encodeABI())
+    try {
+        const ipfsHash = await store(ipfs)
+        const func = btc2eth1Instance.methods.keep(ipfsHash)
+        await sendTx('keep', web3, func.encodeABI())
+    } catch (err) {
+        console.log(err)
+    }
     setTimeout(() => {
         updateKeep(web3, ipfs)
     }, 124400)

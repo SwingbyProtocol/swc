@@ -14,7 +14,7 @@ const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey
 ethConf.tokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 })
-console.log(`owner == ${sender} caller == ${ethConf.caller.address}`)
+console.log(`owner == ${sender} caller == ${ethConf.accountCaller.address}`)
 
 const getAccount = () => {
     return {
