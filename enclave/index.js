@@ -11,11 +11,12 @@ const account = require('../resolvers').account()
 const ecies = require("eth-ecies");
 const sha256 = require('sha256')
 
-let btc2eth1Instance = {}
-let txs = {}
+let btc2eth1Instance
+let txs
 let lastIPFSHash
-let data = {}
+let data
 let nowNonce = 0
+
 api.initWeb3()
 api.initIPFS()
 console.log('daemon start')

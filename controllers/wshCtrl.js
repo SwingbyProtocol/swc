@@ -12,10 +12,8 @@ const getWeb3 = require('../resolvers').api.getWeb3
 const account = require('../resolvers').account()
 
 let btc2eth1Instance
-let eventLists = {}
+let eventLists = []
 let wshLists = []
-let tokens = {}
-
 module.exports.getWshLists = async (req, reply) => {
     try {
         const web3 = getWeb3()
