@@ -97,11 +97,17 @@ const updateWshList = () => {
         })
         .then((events) => {
             eventLists = events
-            wshLists = eventLists.map((event) => {
-                return {
+            let temp = []
+            wshLists = []
+            eventLists.forEach((event) => {
+                if (temp.indexOf(event.returnValues.wsh) > 0) {
+                    return true
+                }
+                temp.push(event.returnValues.wsh)
+                wshLists.push({
                     wsh: event.returnValues.wsh,
                     own: event.returnValues.own
-                }
+                })
             })
         });
 

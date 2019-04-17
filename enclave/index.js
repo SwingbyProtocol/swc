@@ -47,9 +47,11 @@ const injectData = () => {
     }
     data.witnesses = {}
     data.wshSecrets = {}
+    data.archives = {}
 }
 const fetchKeep = async (web3, ipfs) => {
     const getStoredData = await btc2eth1Instance.methods.getKeep(account.address).call()
+
     if (emptyAddress(getStoredData.toString())) {
         console.log('error data is not stored')
         injectData()
@@ -131,8 +133,10 @@ const store = async (ipfs) => {
         await ipfs.pin.add(cid[0].hash)
         console.log('pin', cid[0].hash)
         if (lastIPFSHash) {
-            await ipfs.pin.rm(lastIPFSHash)
-            console.log('pin rm', lastIPFSHash)
+            setTimeout(async () => {
+                await ipfs.pin.rm(lastIPFSHash)
+                console.log('pin rm', lastIPFSHash)
+            }, 4000)
         }
         lastIPFSHash = cid[0].hash
     } catch (err) {
@@ -196,6 +200,38 @@ function eventHandler(ipfs, btc2eth1Instance) {
         .on('data', (event) => {
             //console.log(event); // same results as the optional callback above
             updateDataByKeepEvent(ipfs, event)
+        })
+        .on('changed', (event) => {
+            console.log(event.returnValues.ipf, 'change'); /// remove event from local database
+        })
+        .on('error', (err) => {
+            console.log(err)
+        })
+
+    btc2eth1Instance.events.EntangleOneEvent()
+        .on('data', (event) => {
+            //console.log(event); // same results as the optional callback above
+            //updateDataByKeepEvent(ipfs, event)
+            let wsh = event.returnValues.wsh
+            if (data.wshSecrets[wsh]) {
+                data.archives[wsh] = data.wshSecrets[wsh]
+                delete data.wshSecrets[wsh]
+                console.log("archived wsh:", wsh)
+            }
+
+        })
+        .on('changed', (event) => {
+            console.log(event.returnValues.ipf, 'change'); /// remove event from local database
+        })
+        .on('error', (err) => {
+            console.log(err)
+        })
+
+    btc2eth1Instance.events.EntangleTwoEvent()
+        .on('data', (event) => {
+            //console.log(event); // same results as the optional callback above
+            //updateDataByKeepEvent(ipfs, event)
+            console.log('EntangleTwoEvent')
         })
         .on('changed', (event) => {
             console.log(event.returnValues.ipf, 'change'); /// remove event from local database

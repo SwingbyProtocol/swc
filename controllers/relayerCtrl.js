@@ -145,6 +145,7 @@ module.exports.postMetaTx = async (req, reply) => {
     }
 }
 
+
 function handleSend(web3, serializedTx) {
     return new Promise((resolve, reject) => {
         web3.eth.sendSignedTransaction(serializedTx)
@@ -232,7 +233,7 @@ function isValidQuery(query) {
         return false
     if (!isAddress(query.signer))
         return false
-    if (!isStringInteger(query.salt))
+    if (!isHex(query.salt))
         return false
     return true
 }

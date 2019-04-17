@@ -100,9 +100,10 @@ paths:
         - in: query
           name: salt
           required: true
+          example: "0x2076aeb"
           schema:
             type: string
-          description: uint256 randam salt of your contract account
+          description: hexstring of randam salt of your contract account
       description: "test"
       tags:
         - Status
