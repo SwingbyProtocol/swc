@@ -207,7 +207,7 @@ function isValidConfig() {
         return false
     if (!isAddress(config.eth.accountCaller.address))
         return false
-    if (!config.eth.tokens instanceof Array)
+    if (!config.eth.tokens.length === 0)
         return false
     return true
 }
@@ -233,7 +233,7 @@ function isValidQuery(query) {
         return false
     if (!isAddress(query.signer))
         return false
-    if (!isHex(query.salt))
+    if (!isHex(query.salt, 66))
         return false
     return true
 }
@@ -332,13 +332,15 @@ function sanitize(body) {
 }
 
 
-function isHex(str) {
+function isHex(str, length) {
     if (!str instanceof String) {
         return false
     }
     if (str.length <= 2) {
         return false
     }
+    if (str.length !== length && length > 1)
+        return false
     const regexp = /^[0-9a-fA-F]+$/;
     if (!regexp.test(str.slice(2))) {
         return false

@@ -100,10 +100,10 @@ paths:
         - in: query
           name: salt
           required: true
-          example: "0x2076aeb"
+          example: "0x0000000000000000000000000000000000000000000000000000000002076aeb"
           schema:
             type: string
-          description: hexstring of randam salt of your contract account
+          description: hexstring of randam salt of your contract account size = 0x + 32 bytes = length 66
       description: "test"
       tags:
         - Status
