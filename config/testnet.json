@@ -24,7 +24,7 @@
         }]
     },
     "relayer": {
-        "gasPrice": "3000000000",
-        "safeTxGas": "1200000"
+        "gasPrice": "2000000000",
+        "safeTxGas": "1500000"
     }
 }

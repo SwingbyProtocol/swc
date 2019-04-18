@@ -120,11 +120,13 @@ paths:
                   signer:
                     address: "0xd2330a9f6dDe4715F540D1669bf75E89a1b4FbBc"
                     wallet: "0x82b98AC337A3b2da0450c6BDac5E27f7E6D46960"
-                    nextNonce: "1"
+                    nextNonce: "0x000000000000000000000000000000000000000000000000000000000000000c"
                   relayer:
                     address: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
-                    gasPrice: "4000000000"
-                    gasLimit: "200000"
+                    gasPrice: "0x0000000000000000000000000000000000000000000000000000000077359400"
+                    gasLimit: "0x000000000000000000000000000000000000000000000000000000000016e360"
+                  accountCaller:
+                    address: "0x8eca93ac295939E032694BdaBb42aDB97eF1A35b"
     post:
       parameters:
         - in: path
@@ -152,7 +154,7 @@ paths:
                 salt:
                   type: string
                   required: true
-                  example: "34040555"
+                  example: "0x0000000000000000000000000000000000000000000000000000000002076aeb"
                 to:
                   type: string
                   required: true
@@ -160,7 +162,7 @@ paths:
                 value:
                   type: string
                   required: true
-                  example: "0"
+                  example: "0x0000000000000000000000000000000000000000000000000000000000000000"
                   description: "using BigNumber basically use zero to call"
                 data:
                   type: string
@@ -169,22 +171,22 @@ paths:
                   description: "data payload to call other contract"
                 nonce:
                   type: string
-                  example: "1"
+                  example: "0x000000000000000000000000000000000000000000000000000000000000000a"
                   required: true
                   description: "signer's nonce"
                 gasPrice:
                   type: string
-                  example: "2000000000"
+                  example: "0x0000000000000000000000000000000000000000000000000000000077359400"
                   required: true
                   description: "gasPrice"
                 safeTxGas:
                   type: string
                   required: true
-                  example: "1500000"
+                  example: "0x000000000000000000000000000000000000000000000000000000000016e360"
                 sig:
                   type: string
                   required: true
-                  example: "0xe41a6f641594042fc98ecfb0becec85c3aa57f57307bfeb2cfd55614ce0989b811db8cdd47b24fd227405bbe4928141c98d92e58f0d753f92c1680bb5d9124e21c"
+                  example: "0x77ebdf1ce89d36a20c71a3d5d5069195ce641f8b1e620570790907f24d3bfec95bb2a235720ee85e825d35971441ef0f4417dc211b0dac0abbaf796d3160d0551b"
 
       responses:
         200:

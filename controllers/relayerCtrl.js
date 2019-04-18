@@ -48,12 +48,12 @@ module.exports.getMetaTx = async (req, reply) => {
             signer: {
                 address: query.signer,
                 wallet: ethUtil.toChecksumAddress(calls[2].toString()),
-                nextNonce: new BN(calls[1].toString()).toString()
+                nextNonce: '0x' + new BN(calls[1].toString()).toArrayLike(Buffer, 'be', 32).toString("hex")
             },
             relayer: {
                 address: account.address,
-                gasPrice: new BN(calls[0].toString()).toString(),
-                safeTxGas: config.relayer.safeTxGas
+                gasPrice: '0x' + new BN(calls[0].toString()).toArrayLike(Buffer, 'be', 32).toString('hex'),
+                safeTxGas: '0x' + new BN(config.relayer.safeTxGas).toArrayLike(Buffer, 'be', 32).toString('hex')
             },
             accountCaller: {
                 address: accountCaller.address
@@ -74,7 +74,7 @@ module.exports.postMetaTx = async (req, reply) => {
         const params = req.params
         const body = req.body
 
-        //await validatePost(params, body)
+        await validatePost(params, body)
 
         if (!tokens[params.gasToken]) {
             tokens[params.gasToken] = new web3.eth.Contract(tokenData.abi, params.gasToken)
@@ -96,9 +96,9 @@ module.exports.postMetaTx = async (req, reply) => {
             body.safeTxGas,
             body.sig
         )
-
+        const safeTxGas = new BN(Buffer.from(body.safeTxGas.slice(2), 'hex'))
+        const gasLimit = '0x' + new BN("80000").add(safeTxGas).toString('hex')
         const gasPrice = '0x' + new BN(config.relayer.gasPrice).toString('hex')
-        const gasLimit = '0x' + new BN("80000").add(new BN(body.safeTxGas)).toString('hex')
 
         const batch = []
         batch.push(accountCaller.methods.getNonce(body.signer).call())
@@ -108,7 +108,8 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const expected = new BN(calls[0].toString())
 
-        if (!expected.eq(new BN(body.nonce)))
+        const bnNonce = new BN(Buffer.from(body.nonce.slice(2), 'hex'))
+        if (!expected.eq(bnNonce))
             throw boom.boomify(new Error(`nonce is not correct expected: ${expected.toString()}`))
 
         const txParams = {
@@ -182,9 +183,7 @@ function validatePost(params, body) {
             reject(new Error("token validation error"))
         if (!sanitize(body))
             reject(new Error("sanitize error"))
-        if (!isValidRelayer(body.relayer, account.privkey))
-            reject(new Error("sender or tokenReceiver is not relayer"))
-        if (!isValidMetaTx(body))
+        if (!isValidMetaTx(params, body))
             reject(new Error("valid tx error"))
 
         resolve(true)
@@ -238,95 +237,108 @@ function isValidQuery(query) {
     return true
 }
 
-function isValidRelayer(relayer, privkey) {
-
-    const sender = ethUtil.privateToAddress(privkey).toString('hex')
-    if (Buffer.from(relayer.slice(2), 'hex').toString('hex') !== sender) {
-        return false
-    }
-    return true;
+function addressHex2WithPadding(addressHex) {
+    return ethUtil.setLengthLeft(Buffer.from(addressHex.slice(2), 'hex'), 32)
 }
 
-function isValidMetaTx(body) {
+function isValidMetaTx(params, body) {
 
-    if (config.relayer.gasPrice !== body.gasPrice)
+    const _signer = addressHex2WithPadding(body.signer)
+    const _salt = Buffer.from(body.salt.slice(2), 'hex')
+    const _to = addressHex2WithPadding(body.to)
+    const _value = Buffer.from(body.value.slice(2), 'hex')
+    const _data = Buffer.from(body.data.slice(2), 'hex')
+    const _nonce = Buffer.from(body.nonce.slice(2), "hex")
+    const _gasToken = addressHex2WithPadding(params.gasToken)
+    const _gasPrice = Buffer.from(body.gasPrice.slice(2), "hex")
+    const _safeTxGas = Buffer.from(body.safeTxGas.slice(2), "hex")
+
+    console.log(_signer.toString('hex'))
+    console.log(_salt.toString('hex'))
+    console.log(_to.toString('hex'))
+    console.log(_value.toString('hex'))
+    console.log(_data.toString('hex'))
+    console.log(_nonce.toString('hex'))
+    console.log(_gasToken.toString('hex'))
+    console.log(_gasPrice.toString('hex'))
+    console.log(_safeTxGas.toString('hex'))
+
+    if (config.relayer.gasPrice !== new BN(_gasPrice).toString())
         return false
-    if (config.relayer.safeTxGas !== body.safeTxGas)
+    if (config.relayer.safeTxGas !== new BN(_safeTxGas).toString())
         return false
-    const from = Buffer.from(body.from.slice(2), 'hex')
-    const to = Buffer.from(body.to.slice(2), "hex")
-    const amount = Buffer.from(num2hex32(body.amount), 'hex')
-    const inputs = [
-        Buffer.from(num2hex32(body.inputs[0]), 'hex'),
-        Buffer.from(num2hex32(body.inputs[1]), 'hex'),
-        Buffer.from(num2hex32(body.inputs[2]), 'hex'),
-        Buffer.from(num2hex32(body.inputs[3]), 'hex')
-    ]
-    const relayer = Buffer.from(body.relayer.slice(2), 'hex')
+    const domainSeparator = "0x6dfab631337b71bb9063478db697317b7da12ec65d07ba88a1180284d045a5ca"
 
-    const v = Number(body.v)
-    const r = Buffer.from(body.r.slice(2), 'hex')
-    const s = Buffer.from(body.s.slice(2), 'hex')
-
-    const prefix = new Buffer.from("\x19Ethereum Signed Message:\n32", 'utf-8');
-
-    const msg = ethUtil.keccak256(
+    const hash = ethUtil.keccak256(
         Buffer.concat([
-            Buffer.from(SWINGBY_TX_TYPEHASH.slice(2), 'hex'),
-            from,
-            to,
-            amount,
-            inputs[0],
-            inputs[1],
-            inputs[2],
-            inputs[3],
-            relayer
-        ])
-    );
-    const hash = ethUtil.keccak256(Buffer.concat([prefix, msg]))
+            Buffer.from('\x19\x01'),
+            Buffer.from(domainSeparator.slice(2), 'hex'),
+            ethUtil.keccak256(
+                Buffer.concat([
+                    _signer,
+                    _salt,
+                    _to,
+                    _value,
+                    ethUtil.keccak256(_data),
+                    _nonce,
+                    _gasToken,
+                    _gasPrice,
+                    _safeTxGas
+                ]))
+        ]))
+
+    let rsv = Buffer.from(body.sig.slice(2), 'hex')
+    const r = rsv.slice(0, 32)
+    const s = rsv.slice(32, 64)
+    const v = new BN(rsv.slice(64, body.sig.length - 2)).toNumber()
+
+    console.log("r", r.toString('hex'), "s", s.toString('hex'), "v", v, "hash", hash.toString('hex'))
 
     const pubKey = ethUtil.ecrecover(hash, v, r, s);
-    const addrBuf = ethUtil.pubToAddress(pubKey);
-    const addr = ethUtil.bufferToHex(addrBuf);
+    const addr = ethUtil.publicToAddress(pubKey)
 
-    if (from.toString('hex') === addr.slice(2)) {
+    if (ethUtil.toChecksumAddress(body.signer) === ethUtil.toChecksumAddress(addr.toString('hex'))) {
         return true
     }
     return false
 }
 
 function sanitize(body) {
-    if (!body.from)
+    if (!body.signer)
+        return false
+    if (!body.salt)
         return false
     if (!body.to)
         return false
-    if (!body.amount)
+    if (!body.value)
         return false
-    if (!body.inputs)
+    if (!body.data)
         return false
-    if (!body.relayer)
+    if (!body.nonce)
         return false
-    if (!body.v)
+    if (!body.gasPrice)
         return false
-    if (!body.r)
+    if (!body.safeTxGas)
         return false
-    if (!body.s)
+    if (!body.sig)
         return false
-    if (!isHex(body.from))
+    if (!isAddress(body.signer))
         return false
-    if (!isHex(body.to))
+    if (!isHex(body.salt, 66))
         return false
-    if (!isStringInteger(body.amount))
+    if (!isAddress(body.to))
         return false
-    if (!isValidArray(body.inputs, 4))
+    if (!isHex(body.value, 66))
         return false
-    if (!isHex(body.relayer))
+    if (!isHex(body.data))
         return false
-    if (!isStringInteger(body.v))
+    if (!isHex(body.nonce, 66))
         return false
-    if (!isHex(body.r))
+    if (!isHex(body.gasPrice, 66))
         return false
-    if (!isHex(body.s))
+    if (!isHex(body.safeTxGas, 66))
+        return false
+    if (!isHex(body.sig))
         return false
     return true
 }
@@ -383,8 +395,4 @@ function isValidArray(inputs, length, type) {
         return false
     }
     return true
-}
-
-function num2hex32(stringNum) {
-    return ethUtil.setLengthLeft(new BN(stringNum).toBuffer(), 32).toString('hex')
 }

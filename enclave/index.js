@@ -127,6 +127,8 @@ const store = async (ipfs) => {
     try {
         const doc = JSON.stringify(data, null, 4)
         console.log(data)
+        console.log('enclave operater...', account.address)
+
         cid = await ipfs.add(Buffer.from(doc));
         bytes32 = fromIPFSHash(cid[0].hash)
         console.log("IPFS cid:", cid[0].hash);
