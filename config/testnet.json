@@ -13,14 +13,14 @@
             "port": ""
         }],
         "accountCaller": {
-            "address": "0x8eca93ac295939E032694BdaBb42aDB97eF1A35b"
+            "address": "0x822c3c858B15e81Fd418aa249cAb5273E1804128"
         },
         "btc2eth1": {
             "address": "0x38DBc6D75d1Dfe25fD193428626EB1b7E0A4872c"
         },
-        "tokens": [{
+        "gasTokens": [{
             "name": "tUSDC",
-            "address": "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+            "address": "0x44dCfceAD37Be45206aF6079648988B29284B2c6"
         }]
     },
     "relayer": {

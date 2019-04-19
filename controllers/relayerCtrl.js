@@ -198,7 +198,7 @@ function isValidConfig() {
         return false
     if (!config.eth.accountCaller.address)
         return false
-    if (!config.eth.tokens)
+    if (!config.eth.gasTokens)
         return false
     if (!isStringInteger(config.relayer.safeTxGas))
         return false
@@ -206,7 +206,7 @@ function isValidConfig() {
         return false
     if (!isAddress(config.eth.accountCaller.address))
         return false
-    if (!config.eth.tokens.length === 0)
+    if (!config.eth.gasTokens.length === 0)
         return false
     return true
 }
@@ -217,7 +217,7 @@ function isValidToken(params) {
     if (!isAddress(params.gasToken))
         return false;
     const buf = Buffer.from(params.gasToken.slice(2), 'hex')
-    if (config.eth.tokens.filter((t) => {
+    if (config.eth.gasTokens.filter((t) => {
             return (Buffer.from(t.address.slice(2), 'hex').toString('hex') === buf.toString('hex'))
         }).length === 0) {
         return false
