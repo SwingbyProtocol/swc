@@ -13,6 +13,7 @@ const account = require('../resolvers').account()
 let accountCaller
 let txs = {}
 let tokens = {}
+let domainSeparator;
 
 module.exports.getMetaTx = async (req, reply) => {
     try {
@@ -31,6 +32,7 @@ module.exports.getMetaTx = async (req, reply) => {
 
         if (!accountCaller) {
             accountCaller = new web3.eth.Contract(callerData.abi, config.eth.accountCaller.address)
+            domainSeparator = await accountCaller.methods.domainSeparator().call()
         }
 
         const batch = []
@@ -56,7 +58,8 @@ module.exports.getMetaTx = async (req, reply) => {
                 safeTxGas: '0x' + new BN(config.relayer.safeTxGas).toArrayLike(Buffer, 'be', 32).toString('hex')
             },
             accountCaller: {
-                address: accountCaller.address
+                address: accountCaller.address,
+                domainSeparator: domainSeparator
             }
         }
 
