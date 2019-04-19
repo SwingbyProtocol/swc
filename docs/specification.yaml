@@ -124,7 +124,7 @@ paths:
                   relayer:
                     address: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
                     gasPrice: "0x0000000000000000000000000000000000000000000000000000000077359400"
-                    gasLimit: "0x000000000000000000000000000000000000000000000000000000000016e360"
+                    safeTxGas: "0x000000000000000000000000000000000000000000000000000000000016e360"
                   accountCaller:
                     address: "0x8eca93ac295939E032694BdaBb42aDB97eF1A35b"
                     domainSeparator: "0xdd3eaa84361ae529092cee30ef4138d276b1737dedb5facff3ba7396d40ade9e"
