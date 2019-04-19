@@ -88,7 +88,7 @@ paths:
           required: true
           schema:
             type: string
-          example: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+          example: "0x44dCfceAD37Be45206aF6079648988B29284B2c6"
           description: The gasToken address
         - in: query
           name: signer
@@ -134,7 +134,7 @@ paths:
           required: true
           schema:
             type: string
-          example: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+          example: "0x44dCfceAD37Be45206aF6079648988B29284B2c6"
           description: The gasToken address
       description: "test"
       tags:
