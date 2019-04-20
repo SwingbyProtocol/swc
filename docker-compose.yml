@@ -3,6 +3,7 @@ services:
   daemon:
     build: .
     working_dir: /home/node/app
+    restart: always
     environment:
       - NODE_ENV
       - KEY
