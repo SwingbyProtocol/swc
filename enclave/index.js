@@ -95,7 +95,11 @@ const checkWshes = async (web3, ipfs) => {
                 })
             })
             const func = btc2eth1Instance.methods.addWsh(wsh)
-            await sendTx('addWsh', web3, func.encodeABI())
+            try {
+                await sendTx('addWsh', web3, func.encodeABI())
+            } catch (err) {
+                console.log(err)
+            }
         }
         //console.log(data)
 
@@ -104,6 +108,7 @@ const checkWshes = async (web3, ipfs) => {
     }
 
     setTimeout(() => {
+        const web3 = api.getWeb3()
         checkWshes(web3, ipfs)
     }, 124400)
 }
@@ -117,6 +122,7 @@ const updateKeep = async (web3, ipfs) => {
         console.log(err)
     }
     setTimeout(() => {
+        const web3 = api.getWeb3()
         updateKeep(web3, ipfs)
     }, 124400)
 }
