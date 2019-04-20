@@ -24,7 +24,7 @@ module.exports.getWshLists = async (req, reply) => {
             console.log('init btc2eth1', btc2eth1Instance.address)
             updateWshList()
         }
-        console.log('updated eventLists count:', eventLists.length, 'wshLists', wshLists.length)
+        console.log('updated eventLists count:', eventLists.length, 'wshLists', wshLists.length, 'btc2eth1', btc2eth1Instance.address)
 
         return {
             result: true,

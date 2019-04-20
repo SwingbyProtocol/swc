@@ -1388,8 +1388,8 @@
     "5": {
       "events": {},
       "links": {},
-      "address": "0x1Cc69165d5DE78f7D833b7433232f38148d409a5",
-      "transactionHash": "0x6cc5f9cf711b37e2c17c6efc273d88a13b6cd7d8896a83c3d21113986505232e"
+      "address": "0xEFA859449d55A3FF593f532E104d5396a8878A27",
+      "transactionHash": "0x696995635b42ea022160f49caa7c8f639ff3a4331084c070b1b53b10d71c51cb"
     },
     "343": {
       "events": {},
@@ -1399,7 +1399,7 @@
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-04-16T14:23:41.011Z",
+  "updatedAt": "2019-04-19T04:32:20.769Z",
   "devdoc": {
     "details": "Implementation of the Migrations contract",
     "methods": {},
