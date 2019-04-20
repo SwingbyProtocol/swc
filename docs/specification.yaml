@@ -137,7 +137,7 @@ paths:
             type: string
           example: "0x44dCfceAD37Be45206aF6079648988B29284B2c6"
           description: The gasToken address
-      description: "test"
+      description: "get params of relayer "
       tags:
         - Status
       requestBody:

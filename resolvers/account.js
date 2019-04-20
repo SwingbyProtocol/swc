@@ -11,7 +11,7 @@ if (process.env.NODE_ENV == "testnet") {
 }
 const privkey = new Buffer.from(process.env.KEY.slice(2), 'hex')
 const sender = ethUtil.toChecksumAddress("0x" + ethUtil.privateToAddress(privkey).toString('hex'))
-ethConf.tokens.forEach(t => {
+ethConf.gasTokens.forEach(t => {
     console.log(`supported Tokens = ${t.name} address: ${t.address}`)
 })
 console.log(`owner == ${sender} caller == ${ethConf.accountCaller.address}`)

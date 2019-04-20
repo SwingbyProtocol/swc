@@ -16,7 +16,7 @@ let eventLists = []
 let wshLists = []
 module.exports.getWshLists = async (req, reply) => {
     try {
-        const web3 = getWeb3()
+        const web3 = await getWeb3()
         console.log(`current provider: ${web3.currentProvider.host}`)
 
         if (!btc2eth1Instance) {
@@ -37,7 +37,7 @@ module.exports.getWshLists = async (req, reply) => {
 
 module.exports.getWshSingle = async (req, reply) => {
     try {
-        const web3 = getWeb3()
+        const web3 = await getWeb3()
         console.log(`current provider: ${web3.currentProvider.host}`)
 
         const params = req.params

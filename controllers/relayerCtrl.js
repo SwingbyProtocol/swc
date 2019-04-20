@@ -17,7 +17,7 @@ let domainSeparator;
 
 module.exports.getMetaTx = async (req, reply) => {
     try {
-        const web3 = getWeb3()
+        const web3 = await getWeb3()
         console.log(`current provider: ${web3.currentProvider.host}`)
 
         const params = req.params
@@ -70,7 +70,7 @@ module.exports.getMetaTx = async (req, reply) => {
 
 module.exports.postMetaTx = async (req, reply) => {
     try {
-        const web3 = getWeb3()
+        const web3 = await getWeb3()
 
         console.log(`current provider: ${web3.currentProvider.host}`)
 

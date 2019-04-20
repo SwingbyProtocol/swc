@@ -8,9 +8,6 @@
         "nodes": [{
             "host": "ws://35.221.164.62",
             "port": "8546"
-        }, {
-            "host": "wss://goerli.infura.io/ws/v3/c2f0a8b07b5747b19200a97f41f1949b",
-            "port": ""
         }],
         "accountCaller": {
             "address": "0x822c3c858B15e81Fd418aa249cAb5273E1804128"

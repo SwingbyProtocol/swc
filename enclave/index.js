@@ -17,26 +17,17 @@ let nowNonce = 0
 let txs = {}
 let data = {}
 
-api.initWeb3()
-api.initIPFS()
 console.log('daemon start')
 
 setTimeout(async () => {
     try {
-        const web3 = api.getWeb3()
-        const ipfs = api.getIPFS()
-        btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
-        eventHandler(ipfs, btc2eth1Instance)
-
-        await fetchKeep(web3, ipfs)
-        await checkWshes(web3, ipfs)
-        await updateKeep(web3, ipfs)
-
+        await fetchKeep()
+        await checkWshes()
+        await updateKeep()
+        eventHandler()
     } catch (err) {
         console.log(err)
-
     }
-
 }, 5000)
 
 
@@ -49,16 +40,20 @@ const injectData = () => {
     data.wshSecrets = {}
     data.archives = {}
 }
-const fetchKeep = async (web3, ipfs) => {
-    const getStoredData = await btc2eth1Instance.methods.getKeep(account.address).call()
+const fetchKeep = async () => {
+    try {
+        const web3 = await api.getWeb3()
+        if (!btc2eth1Instance) {
+            btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
+        }
+        const getStoredData = await btc2eth1Instance.methods.getKeep(account.address).call()
 
-    if (emptyAddress(getStoredData.toString())) {
-        console.log('error data is not stored')
-        injectData()
-    } else {
-        try {
+        if (emptyAddress(getStoredData.toString())) {
+            console.log('error data is not stored')
+            injectData()
+        } else {
             const ipfsHash = toIPFSHash(getStoredData.toString())
-            const result = await ipfsCall(ipfs, ipfsHash)
+            const result = await ipfsCall(ipfsHash)
             if (!result.owner) {
                 console.log('error data is not exist will be init')
                 injectData()
@@ -67,79 +62,73 @@ const fetchKeep = async (web3, ipfs) => {
                 data = result
             }
             //injectData()
-        } catch (err) {
-            console.log(err)
         }
+    } catch (err) {
+        console.log(err)
     }
 }
 
-const checkWshes = async (web3, ipfs) => {
-    const injects = data.wshSecrets
-    const keysOfInejects = Object.keys(injects)
-    if (keysOfInejects.length <= 10) {
-        const secret = web3.utils.randomHex(32)
-        const wsh = '0x' + sha256(Buffer.from(secret.slice(2), 'hex'))
-        console.log(secret, wsh)
-        const witnesses = data.witnesses
-        const keysOfWitnesses = Object.keys(witnesses)
-        if (keysOfWitnesses.length >= 3) {
-            data.wshSecrets[wsh] = []
-            keysOfWitnesses.forEach((address) => {
-                const witness = witnesses[address]
-                const userPublicKey = Buffer.from(witness.pubkey.slice(2), 'hex');
-                const bufferData = Buffer.from(secret);
-                const encryptedData = ecies.encrypt(userPublicKey, bufferData);
-                data.wshSecrets[wsh].push({
-                    address: witness.address,
-                    encrypted: encryptedData.toString('base64')
-                })
-            })
-            const func = btc2eth1Instance.methods.addWsh(wsh)
-            try {
-                await sendTx('addWsh', web3, func.encodeABI())
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        //console.log(data)
-
-    } else {
-        console.log('reach max size of secrets')
-    }
-
-    setTimeout(() => {
-        const web3 = api.getWeb3()
-        checkWshes(web3, ipfs)
-    }, 124400)
-}
-
-const updateKeep = async (web3, ipfs) => {
+const checkWshes = async () => {
     try {
-        const ipfsHash = await store(ipfs)
-        const func = btc2eth1Instance.methods.keep(ipfsHash)
-        await sendTx('keep', web3, func.encodeABI())
+        const injects = data.wshSecrets
+        const keysOfInejects = Object.keys(injects)
+        const web3 = await api.getWeb3()
+        const secret = web3.utils.randomHex(32)
+        if (keysOfInejects.length <= 10) {
+            const wsh = '0x' + sha256(Buffer.from(secret.slice(2), 'hex'))
+            console.log(secret, wsh)
+            const witnesses = data.witnesses
+            const keysOfWitnesses = Object.keys(witnesses)
+            if (keysOfWitnesses.length >= 3) {
+                data.wshSecrets[wsh] = []
+                keysOfWitnesses.forEach((address) => {
+                    const witness = witnesses[address]
+                    const userPublicKey = Buffer.from(witness.pubkey.slice(2), 'hex');
+                    const bufferData = Buffer.from(secret);
+                    const encryptedData = ecies.encrypt(userPublicKey, bufferData);
+                    data.wshSecrets[wsh].push({
+                        address: witness.address,
+                        encrypted: encryptedData.toString('base64')
+                    })
+                })
+                const func = btc2eth1Instance.methods.addWsh(wsh)
+                await sendTx('addWsh', func.encodeABI())
+            }
+            //console.log(data)
+        } else {
+            console.log('reach max size of secrets')
+        }
     } catch (err) {
         console.log(err)
     }
     setTimeout(() => {
-        const web3 = api.getWeb3()
-        updateKeep(web3, ipfs)
+        checkWshes()
     }, 124400)
 }
 
-const store = async (ipfs) => {
-    let bytes32
-    let cid
+const updateKeep = async () => {
+    try {
+        const ipfsHash = await storeIPFS()
+        const func = btc2eth1Instance.methods.keep(ipfsHash)
+        await sendTx('keep', func.encodeABI())
+    } catch (err) {
+        console.log(err)
+    }
+    setTimeout(() => {
+        updateKeep()
+    }, 124400)
+}
+
+const storeIPFS = async () => {
     try {
         const doc = JSON.stringify(data, null, 4)
         console.log(data)
         console.log('enclave operater...', account.address)
-
-        cid = await ipfs.add(Buffer.from(doc));
-        bytes32 = fromIPFSHash(cid[0].hash)
-        console.log("IPFS cid:", cid[0].hash);
+        const ipfs = await api.getIPFS()
+        let cid = await ipfs.add(Buffer.from(doc));
+        let bytes32 = fromIPFSHash(cid[0].hash)
         await ipfs.pin.add(cid[0].hash)
-        console.log('pin', cid[0].hash)
+        console.log('IPFS pinned cid:', cid[0].hash)
         if (lastIPFSHash) {
             setTimeout(async () => {
                 await ipfs.pin.rm(lastIPFSHash)
@@ -147,16 +136,17 @@ const store = async (ipfs) => {
             }, 4000)
         }
         lastIPFSHash = cid[0].hash
+        return '0x' + bytes32.toString('hex')
+
     } catch (err) {
         console.log(err)
     }
-    return '0x' + bytes32.toString('hex')
 }
 
-const attachWitnessToData = async (ipfs, own, ipf) => {
+const attachWitnessToData = async (own, ipf) => {
     try {
         const ipfsPath = toIPFSHash(ipf)
-        const parsed = await ipfsCall(ipfs, ipfsPath)
+        const parsed = await ipfsCall(ipfsPath)
         if (!data.owner) {
             console.log('error data is not exist')
             return false
@@ -172,13 +162,13 @@ const attachWitnessToData = async (ipfs, own, ipf) => {
     }
 }
 
-const sendTx = async (method, web3, data) => {
-
+const sendTx = async (method, data) => {
+    const web3 = await api.getWeb3()
     const nonce = await web3.eth.getTransactionCount(account.address)
     console.log('nowNonce', nowNonce.toString(), 'nonce', nonce.toString())
-    nowNonce = nowNonce.toString() == nonce.toString() ? new BN(nonce.toString()).add(new BN("1")) : new BN(nonce.toString())
+    nowNonce = nowNonce.toString() === nonce.toString() ? new BN(nonce.toString()).add(new BN("1")) : new BN(nonce.toString())
     const txParams = {
-        nonce: '0x' + nowNonce.toString(16),
+        nonce: '0x' + nowNonce.toArrayLike(Buffer, 'be', 32).toString('hex'),
         gasPrice: 2000000000,
         gasLimit: 300000,
         from: account.address,
@@ -203,11 +193,11 @@ const sendTx = async (method, web3, data) => {
 
 
 
-function eventHandler(ipfs, btc2eth1Instance) {
+function eventHandler() {
     btc2eth1Instance.events.KeepEvent()
         .on('data', (event) => {
             //console.log(event); // same results as the optional callback above
-            updateDataByKeepEvent(ipfs, event)
+            updateDataByKeepEvent(event)
         })
         .on('changed', (event) => {
             console.log(event.returnValues.ipf, 'change'); /// remove event from local database
@@ -249,8 +239,8 @@ function eventHandler(ipfs, btc2eth1Instance) {
         })
 }
 
-const updateDataByKeepEvent = (ipfs, event) => {
-    attachWitnessToData(ipfs, event.returnValues.own, event.returnValues.ipf)
+const updateDataByKeepEvent = (event) => {
+    attachWitnessToData(event.returnValues.own, event.returnValues.ipf)
 }
 
 
@@ -270,20 +260,9 @@ const handleSend = (web3, serializedTx) => {
     })
 }
 
-function addWshHashGroup(web3, wsh, wshSecret, witnesses) {
-
-}
-
-function decryptWshHash(wsh, data) {
-    let userPrivateKey = account.privkey
-    let bufferEncryptedData = new Buffer(encryptedData, 'base64');
-    let decryptedData = ecies.decrypt(userPrivateKey, bufferEncryptedData);
-}
-
-
-
-const ipfsCall = (ipfs, ipfsHash) => {
-    return new Promise((resolve, reject) => {
+const ipfsCall = (ipfsHash) => {
+    return new Promise(async (resolve, reject) => {
+        const ipfs = await api.getIPFS()
         ipfs.cat(ipfsHash).then((retunData) => {
             const result = JSON.parse(retunData.toString())
             resolve(result)
