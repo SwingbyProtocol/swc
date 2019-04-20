@@ -31,16 +31,17 @@ module.exports.initWeb3 = () => {
         })
 
         provider.on('error', e => {
-            console.error('WS Error')
             console.log(`web3 websock is not connect: error ${eth.host}`)
+            instance.web3 = null
+            reject(new Error('WS Error'))
         })
         provider.on('close', e => {
-            console.error('WS Closed: instance reset')
             instance.web3 = null
+            reject(new Error('WS Closed: instance reset'))
         })
         provider.on('end', e => {
-            console.error('WS Ended: instance reset')
             instance.web3 = null
+            reject(new Error('WS Ended: instance reset'))
         })
     })
 

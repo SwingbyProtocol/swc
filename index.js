@@ -3,13 +3,7 @@
 const fastify = require("./fastify")
 const routes = require("./routes")
 const task = require('child_process');
-const resolvers = require("./resolvers")
-const initIPFS = resolvers.api.initIPFS
-const initWeb3 = resolvers.api.initWeb3
-
-initIPFS()
-initWeb3()
-
+const registers = require('./resolvers')
 //const daemon = task.fork('./daemon');
 
 fastify.register(
@@ -18,7 +12,7 @@ fastify.register(
   }
 )
 
-
+registers.api.initWeb3()
 // Run the server!
 const start = async () => {
   try {

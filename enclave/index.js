@@ -70,9 +70,15 @@ const fetchKeep = async () => {
 
 const checkWshes = async () => {
     try {
+        const web3 = await api.getWeb3()
+        if (!btc2eth1Instance) {
+            btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
+        }
+        if (!data.owner) {
+            fetchKeep()
+        }
         const injects = data.wshSecrets
         const keysOfInejects = Object.keys(injects)
-        const web3 = await api.getWeb3()
         const secret = web3.utils.randomHex(32)
         if (keysOfInejects.length <= 10) {
             const wsh = '0x' + sha256(Buffer.from(secret.slice(2), 'hex'))
@@ -103,11 +109,18 @@ const checkWshes = async () => {
     }
     setTimeout(() => {
         checkWshes()
-    }, 124400)
+    }, 14400)
 }
 
 const updateKeep = async () => {
     try {
+        const web3 = await api.getWeb3()
+        if (!btc2eth1Instance) {
+            btc2eth1Instance = new web3.eth.Contract(btc2eth1.abi, config.eth.btc2eth1.address)
+        }
+        if (!data.owner) {
+            fetchKeep()
+        }
         const ipfsHash = await storeIPFS()
         const func = btc2eth1Instance.methods.keep(ipfsHash)
         await sendTx('keep', func.encodeABI())
@@ -116,7 +129,7 @@ const updateKeep = async () => {
     }
     setTimeout(() => {
         updateKeep()
-    }, 124400)
+    }, 14400)
 }
 
 const storeIPFS = async () => {
@@ -166,7 +179,12 @@ const sendTx = async (method, data) => {
     const web3 = await api.getWeb3()
     const nonce = await web3.eth.getTransactionCount(account.address)
     console.log('nowNonce', nowNonce.toString(), 'nonce', nonce.toString())
-    nowNonce = nowNonce.toString() === nonce.toString() ? new BN(nonce.toString()).add(new BN("1")) : new BN(nonce.toString())
+
+    if (new BN(nonce.toString()).gt(nowNonce)) {
+        nowNonce = new BN(nonce.toString())
+    }
+    console.log('nowNonce', nowNonce.toString(), 'nonce', nonce.toString())
+
     const txParams = {
         nonce: '0x' + nowNonce.toArrayLike(Buffer, 'be', 32).toString('hex'),
         gasPrice: 2000000000,
@@ -176,7 +194,7 @@ const sendTx = async (method, data) => {
         data: data,
         chainId: process.env.NODE_ENV === 'mainnet' ? 0 : 5
     };
-
+    nowNonce = nowNonce.add(new BN("1"))
     const tx = new ethTx(txParams);
     tx.sign(account.privkey);
 
@@ -192,51 +210,57 @@ const sendTx = async (method, data) => {
 }
 
 
+const eventHandler = async () => {
+    try {
+        if (!btc2eth1Instance) {
+            return false
+        }
+        btc2eth1Instance.events.KeepEvent()
+            .on('data', (event) => {
+                //console.log(event); // same results as the optional callback above
+                updateDataByKeepEvent(event)
+            })
+            .on('changed', (event) => {
+                console.log(event.returnValues.ipf, 'change'); /// remove event from local database
+            })
+            .on('error', (err) => {
+                console.log(err)
+            })
 
-function eventHandler() {
-    btc2eth1Instance.events.KeepEvent()
-        .on('data', (event) => {
-            //console.log(event); // same results as the optional callback above
-            updateDataByKeepEvent(event)
-        })
-        .on('changed', (event) => {
-            console.log(event.returnValues.ipf, 'change'); /// remove event from local database
-        })
-        .on('error', (err) => {
-            console.log(err)
-        })
+        btc2eth1Instance.events.EntangleOneEvent()
+            .on('data', (event) => {
+                //console.log(event); // same results as the optional callback above
+                //updateDataByKeepEvent(ipfs, event)
+                let wsh = event.returnValues.wsh
+                if (data.wshSecrets[wsh]) {
+                    data.archives[wsh] = data.wshSecrets[wsh]
+                    delete data.wshSecrets[wsh]
+                    console.log("archived wsh:", wsh)
+                }
 
-    btc2eth1Instance.events.EntangleOneEvent()
-        .on('data', (event) => {
-            //console.log(event); // same results as the optional callback above
-            //updateDataByKeepEvent(ipfs, event)
-            let wsh = event.returnValues.wsh
-            if (data.wshSecrets[wsh]) {
-                data.archives[wsh] = data.wshSecrets[wsh]
-                delete data.wshSecrets[wsh]
-                console.log("archived wsh:", wsh)
-            }
+            })
+            .on('changed', (event) => {
+                console.log(event.returnValues.ipf, 'change'); /// remove event from local database
+            })
+            .on('error', (err) => {
+                console.log(err)
+            })
 
-        })
-        .on('changed', (event) => {
-            console.log(event.returnValues.ipf, 'change'); /// remove event from local database
-        })
-        .on('error', (err) => {
-            console.log(err)
-        })
-
-    btc2eth1Instance.events.EntangleTwoEvent()
-        .on('data', (event) => {
-            //console.log(event); // same results as the optional callback above
-            //updateDataByKeepEvent(ipfs, event)
-            console.log('EntangleTwoEvent')
-        })
-        .on('changed', (event) => {
-            console.log(event.returnValues.ipf, 'change'); /// remove event from local database
-        })
-        .on('error', (err) => {
-            console.log(err)
-        })
+        btc2eth1Instance.events.EntangleTwoEvent()
+            .on('data', (event) => {
+                //console.log(event); // same results as the optional callback above
+                //updateDataByKeepEvent(ipfs, event)
+                console.log('EntangleTwoEvent')
+            })
+            .on('changed', (event) => {
+                console.log(event.returnValues.ipf, 'change'); /// remove event from local database
+            })
+            .on('error', (err) => {
+                console.log(err)
+            })
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const updateDataByKeepEvent = (event) => {
