@@ -159,7 +159,7 @@ paths:
                 to:
                   type: string
                   required: true
-                  example: "0x142c68565b6cda5EE19d1aE704A0Bbe80f43c0A8"
+                  example: "0x44dcfcead37be45206af6079648988b29284b2c6"
                 value:
                   type: string
                   required: true
@@ -172,7 +172,7 @@ paths:
                   description: "data payload to call other contract"
                 nonce:
                   type: string
-                  example: "0x000000000000000000000000000000000000000000000000000000000000000a"
+                  example: "0000000000000000000000000000000000000000000000000000000000000000"
                   required: true
                   description: "signer's nonce"
                 gasPrice:
