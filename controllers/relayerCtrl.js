@@ -104,7 +104,6 @@ module.exports.postMetaTx = async (req, reply) => {
         )
         const safeTxGas = new BN(Buffer.from(body.safeTxGas.slice(2), 'hex'))
         const gasLimit = '0x' + new BN("80000").add(safeTxGas).toString('hex')
-        const gasPrice = '0x' + new BN(config.relayer.gasPrice).toString('hex')
 
         const batch = []
         batch.push(accountCaller.methods.getNonce(body.signer).call())
@@ -120,7 +119,7 @@ module.exports.postMetaTx = async (req, reply) => {
 
         const txParams = {
             nonce: '0x' + calls[1].toString(16),
-            gasPrice: gasPrice,
+            gasPrice: 2 * 10 ** 9,
             gasLimit: gasLimit,
             from: account.address,
             to: accountCaller.address,
