@@ -167,7 +167,7 @@ paths:
                   description: "using BigNumber basically use zero to call"
                 data:
                   type: string
-                  example: "0xa9059cbb0000000000000000000000007d0344e0ee6bc3901f4b11b9d9b8d001b49872a10000000000000000000000000000000000000000000000022b1c8c1227a00000"
+                  example: "0xa9059cbb0000000000000000000000007d0344e0ee6bc3901f4b11b9d9b8d001b49872a10000000000000000000000000000000000000000000000000000000077359400"
                   required: true
                   description: "data payload to call other contract"
                 nonce:
