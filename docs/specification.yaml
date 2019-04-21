@@ -123,7 +123,7 @@ paths:
                     nextNonce: "0x000000000000000000000000000000000000000000000000000000000000000c"
                   relayer:
                     address: "0xb38f6C9d887b038038aa0272a4cd15c75B28E781"
-                    gasPrice: "0x00000000000000000000000000000000000000000000000000000006fc23ac00"
+                    gasPrice: "0x000000000000000000000000000000000000000000000000000000000000001e"
                     safeTxGas: "0x000000000000000000000000000000000000000000000000000000000016e360"
                   accountCaller:
                     address: "0x8eca93ac295939E032694BdaBb42aDB97eF1A35b"
@@ -172,12 +172,12 @@ paths:
                   description: "data payload to call other contract"
                 nonce:
                   type: string
-                  example: "0000000000000000000000000000000000000000000000000000000000000000"
+                  example: "0x0000000000000000000000000000000000000000000000000000000000000000"
                   required: true
                   description: "signer's nonce"
                 gasPrice:
                   type: string
-                  example: "0x00000000000000000000000000000000000000000000000000000006fc23ac00"
+                  example: "0x000000000000000000000000000000000000000000000000000000000000001e"
                   required: true
                   description: "gasPrice"
                 safeTxGas:
