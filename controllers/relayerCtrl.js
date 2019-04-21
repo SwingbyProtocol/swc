@@ -77,15 +77,18 @@ module.exports.postMetaTx = async (req, reply) => {
         const params = req.params
         const body = req.body
 
+        if (!accountCaller) {
+            accountCaller = new web3.eth.Contract(callerData.abi, config.eth.accountCaller.address)
+            domainSeparator = await accountCaller.methods.domainSeparator().call()
+        }
+
         await validatePost(params, body)
 
         if (!tokens[params.gasToken]) {
             tokens[params.gasToken] = new web3.eth.Contract(tokenData.abi, params.gasToken)
         }
 
-        if (!accountCaller) {
-            accountCaller = new web3.eth.Contract(callerData.abi, config.eth.accountCaller.address)
-        }
+
 
         const func = accountCaller.methods.callWithDeploy(
             body.signer,
@@ -271,8 +274,6 @@ function isValidMetaTx(params, body) {
 
     if (config.relayer.safeTxGas !== new BN(_safeTxGas).toString())
         throw boom.boomify(new Error(`_safeTxGaÏs is not correct. check value of contract`))
-
-    const domainSeparator = "0x6dfab631337b71bb9063478db697317b7da12ec65d07ba88a1180284d045a5ca"
 
     const hash = ethUtil.keccak256(
         Buffer.concat([
