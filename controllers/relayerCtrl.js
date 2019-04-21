@@ -270,7 +270,7 @@ function isValidMetaTx(params, body) {
         throw boom.boomify(new Error(`_gasPrice is not correct. check value of contract`))
 
     if (config.relayer.safeTxGas !== new BN(_safeTxGas).toString())
-        throw boom.boomify(new Error(`_safeTxGas is not correct. check value of contract`))
+        throw boom.boomify(new Error(`_safeTxGaÏs is not correct. check value of contract`))
 
     const domainSeparator = "0x6dfab631337b71bb9063478db697317b7da12ec65d07ba88a1180284d045a5ca"
 
